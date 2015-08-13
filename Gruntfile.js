@@ -38,6 +38,16 @@ module.exports = function(grunt) {
                 dest: '',
                 ext: '.js'
             },
+            NodeApplication: {
+                options: {
+                    bare: true
+                },
+                expand: true,
+                cwd: 'coffee/node',
+                src: ['application/**/*.coffee'],
+                dest: '',
+                ext: '.js'
+            },
             main: {
                 options: {
                     bare: true
@@ -55,8 +65,8 @@ module.exports = function(grunt) {
                 livereload: true
             },
             scripts:{
-                files: ['coffee/Application/*.coffee', 'coffee/*.coffee', 'coffee/node/*.coffee'],
-                tasks: ['newer:coffee:Application','newer:coffee:main','newer:coffee:Node']
+                files: ['coffee/Application/*.coffee', 'coffee/*.coffee', 'coffee/node/*.coffee', 'coffee/node/application/**/*.coffee'],
+                tasks: ['newer:coffee:Application','newer:coffee:main','newer:coffee:Node','newer:coffee:NodeApplication']
             }
         },
         js2coffee: {
@@ -118,6 +128,6 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-newer');
     grunt.loadNpmTasks('grunt-js2coffee');
 
-    grunt.registerTask('default', ['coffee:Application','coffee:Node','coffee:main','watch']);
+    grunt.registerTask('default', ['coffee:Application','coffee:Node','coffee:main','coffee:NodeApplication','watch']);
 
 };

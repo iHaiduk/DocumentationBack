@@ -1,8 +1,10 @@
-var app, applicationDirectory, config, express, path, pub;
+var app, applicationDirectory, bodyParser, config, express, path, pub;
 
 applicationDirectory = __dirname + '/application/';
 
 express = require('express');
+
+bodyParser = require("body-parser");
 
 app = express();
 
@@ -22,6 +24,10 @@ app.set('views', config.dirViews);
 app.set('view engine', config.viewEngine);
 
 app.use(express['static'](pub));
+
+app.use(bodyParser.urlencoded({
+  extended: false
+}));
 
 
 /* Adapter */

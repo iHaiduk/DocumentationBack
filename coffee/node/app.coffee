@@ -1,5 +1,6 @@
 applicationDirectory = __dirname + '/application/'
 express = require('express')
+bodyParser = require("body-parser")
 app = express()
 path = require('path')
 global["http"] = require('http').Server(app)
@@ -10,6 +11,7 @@ pub = __dirname + '/' + config.publicFolder
 app.set 'views', config.dirViews
 app.set 'view engine', config.viewEngine
 app.use express['static'](pub)
+app.use bodyParser.urlencoded(extended: false)
 
 
 ### Adapter ###

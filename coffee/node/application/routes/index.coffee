@@ -6,16 +6,17 @@ routes =
 			HomeController::run(req, res)
 			return
 
-	about:
-		type: 'get'
-		link: '/about'
+	save:
+		type: 'post'
+		link: '/save'
 		control: (req, res) ->
-			console.log 'Page about'
+			HomeController::save(req, res)
 			return
 
 module.exports = class Routes
 	init: (app)->
 		for i of routes
 			page = routes[i]
+			console.log page
 			app[page.type] page.link, page.control
-			return
+		return

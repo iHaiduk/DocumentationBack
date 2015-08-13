@@ -9,6 +9,7 @@ app = {
   Menu: null,
   Image: null,
   Video: null,
+  codeSave: null,
   path: "../"
 };
 

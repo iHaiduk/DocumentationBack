@@ -6,7 +6,7 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
   var _docum;
   _docum = $(document);
   _docum.ready(function() {
-    var Redactor, link_insert, redactor;
+    var CodeSave, Redactor, codeSave, link_insert, redactor;
     link_insert = 0;
     $.Redactor.prototype.insertHead = function() {
       return {
@@ -88,6 +88,50 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
         }
       };
     };
+    CodeSave = (function() {
+      function CodeSave(deafult) {
+        if (deafult == null) {
+          deafult = [];
+        }
+        CodeSave.prototype.code = deafult;
+      }
+
+      CodeSave.prototype.init = function() {
+        return this;
+      };
+
+      CodeSave.prototype.clean = function() {
+        CodeSave.prototype.code = [];
+      };
+
+      CodeSave.prototype.add = function(code, parametr) {
+        if (parametr == null) {
+          parametr = "text";
+        }
+        return CodeSave.prototype.code = {
+          param: parametr,
+          code: "<div class=\"section\">\n<div class=\"sub-section\">" + code + "</div>\n</div>"
+        };
+      };
+
+      CodeSave.prototype.send = function() {
+        $.ajax({
+          url: "/save",
+          type: "post",
+          data: {
+            code: JSON.stringify(CodeSave.prototype.code)
+          },
+          dataType: "json",
+          success: function(res) {
+            return console.log(res);
+          }
+        });
+        return console.log(CodeSave.prototype.code);
+      };
+
+      return CodeSave;
+
+    })();
     Redactor = (function() {
       function Redactor(document, nameElement) {
         Redactor.prototype.redactor = null;
@@ -112,7 +156,7 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
           }
         };
         Redactor.prototype.template = {
-          empty: "<div class=\"section\">\n    <div class=\"sub-section\"></div>\n    <div class=\"media-toolbar\">\n        <span class=\"btn btn-toggle icon-plus\"></span>\n        <div class=\"menu-toolbar\">\n            <span class=\"btn icon-image\"></span>\n            <span class=\"btn icon-code\"></span>\n            <span class=\"btn icon-hr\"></span>\n        </div>\n    </div>\n</div>",
+          empty: "<div class=\"section\">\n    <div class=\"sub-section\"></div>\n</div>",
           image: "<form id=\"form1\" runat=\"server\">\n<label for='imgInp' id='uploadImage'></label>\n    <input type='file' id=\"imgInp\" />\n</form>\n    <img src=\"\" />",
           code: "<textarea class='code'></textarea><ul class=\"language-list\" >\n<li class=\"language\" data-type=\"htmlmixed\">HTML</li>\n<li class=\"language\" data-type=\"CSS\">CSS</li>\n<li class=\"language\" data-type=\"SASS\">SASS</li>\n<li class=\"language\" data-type=\"JavaScript\">JavaScript</li>\n<li class=\"language\" data-type=\"coffeescript\">CoffeeScript</li>\n<li class=\"language\" data-type=\"PHP\">PHP</li>\n<li class=\"language\" data-type=\"SQL\">SQL</li>\n</ul>",
           video: "<input class='video' type='text' placeholder='Please insert youtube ID...' />",
@@ -130,10 +174,12 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
             Redactor.prototype.showPlusButton();
             app.Image.edit();
           } else {
+            app.codeSave.clean();
             $(this).removeClass("btn-save").addClass("btn-edit");
             $("body").removeClass("editing");
             Redactor.prototype.save();
             app.Image.save();
+            app.codeSave.send();
           }
         });
         Redactor.prototype.document.find(".code").each(function() {
@@ -207,7 +253,7 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
                 parent.html("<div class=\"videoView\" data-youtube-id='" + $(this).val() + "' data-ratio=\"16:9\"></div>");
                 parent.after("<span class=\"btn btn-toggle remove\"></span>");
                 app.Video.activate(parent.find(".videoView"));
-                return Redactor.prototype.addListen();
+                Redactor.prototype.addListen();
               }
             });
           });
@@ -227,7 +273,6 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
               theme: "3024-day"
             });
             Redactor.prototype.changeTypeListen();
-            Redactor.prototype.loadRedactors();
           });
         });
         Redactor.prototype.document.find('.icon-hr').off('click').on('click', function() {
@@ -341,7 +386,7 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
               });
               this.$element.find("p").each(function() {
                 if ($(this).text().length && !$(this).html().replace(/\u200B/g, '').length) {
-                  return $(this).html("<br/>");
+                  $(this).html("<br/>");
                 }
               });
               this.code.sync();
@@ -350,7 +395,7 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
             changeCallback: function() {
               this.$element.find("p").each(function() {
                 if ($(this).text().length && !$(this).html().replace(/\u200B/g, '').length) {
-                  return $(this).html("<br/>");
+                  $(this).html("<br/>");
                 }
               });
               Redactor.prototype.showPlusButton(this, true);
@@ -368,24 +413,23 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
                 Redactor.prototype.showPlusButton(redactor, true);
               }, 10);
             },
-            keydownCallback: function(e) {
-              var key;
+            keyupCallback: function(e) {
+              var aselect, key;
               key = e.which;
-              if ((e.keyCode === 8 || e.keyCode === 46) && $(this.selection.getBlock()).hasClass("empty")) {
+              Redactor.prototype.lastSection = $(this.selection.getBlock());
+              if ((e.keyCode === 8) && $(this.selection.getBlock()).hasClass("empty")) {
                 $(this.selection.getBlock()).remove();
                 if (!this.$element.find("p:not(.empty)").length && ($("#viewDoc").find(".sub-section:not(.noRedactor)").length - 1)) {
                   this.$element.parents(".section").remove();
                 }
+                return;
               }
-            },
-            keyupCallback: function(e) {
-              var key;
-              key = e.which;
-              Redactor.prototype.lastSection = $(this.selection.getBlock());
               if (e.keyCode === 13) {
                 this.selection.restore();
+                aselect = $(this.selection.getBlock()).parent();
                 if ($(this.selection.getBlock()).text().trim() === "") {
-                  $(this.selection.getBlock()).parent().toggleClass("empty", true);
+                  aselect.toggleClass("empty", true);
+                  $(this.selection.getBlock()).html("<br/>");
                 }
                 this.code.sync();
                 this.observe.load();
@@ -434,35 +478,34 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
           Redactor.prototype.redactor.observe.load();
           Redactor.prototype.listenEvent(element);
         });
-        element.off('mousedown mouseup').on('mousedown mouseup', function(event) {
+        return element.off('mousedown mouseup').on('mousedown mouseup', function(event) {
+          var elem, offset, selection, toolbar;
           if (event.type === 'mousedown') {
             Redactor.prototype.position.start.y = event.pageY;
             Redactor.prototype.position.start.x = event.pageX;
           } else {
             Redactor.prototype.position.end.y = event.pageY;
             Redactor.prototype.position.end.x = event.pageX;
-          }
-        }).off('click').on('click', function(e) {
-          var elem, offset, selection, toolbar;
-          Redactor.prototype.showPlusButton(null, true);
-          Redactor.prototype.lastSection = $(this);
-          $("#link-toolbar").removeClass("active").find("#link_value").val("");
-          elem = $(e.target);
-          if (elem[0].tagName.toLowerCase() === "a") {
-            offset = elem.offset();
-            Redactor.prototype.lastLinkActive = elem.attr("id");
-            $("#link_value").val(elem.attr("href"));
-            offset.top = parseInt(offset.top) - 57;
-            offset.left = parseInt(offset.left) - 120 + elem.width() / 2;
-            Redactor.prototype.linkShow(offset);
-          }
-          selection = window.getSelection == null ? window.getSelection() : document.getSelection();
-          if (selection.type === 'Range') {
-            toolbar = $(this).prev();
-            Redactor.prototype.toolbar = toolbar;
-            Redactor.prototype.toolbarPosition(toolbar);
-          } else {
-            element.parent().find('.redactor-toolbar').hide();
+            Redactor.prototype.showPlusButton(null, true);
+            Redactor.prototype.lastSection = $(this);
+            $("#link-toolbar").removeClass("active").find("#link_value").val("");
+            elem = $(event.target);
+            if (elem[0].tagName.toLowerCase() === "a") {
+              offset = elem.offset();
+              Redactor.prototype.lastLinkActive = elem.attr("id");
+              $("#link_value").val(elem.attr("href"));
+              offset.top = parseInt(offset.top) - 57;
+              offset.left = parseInt(offset.left) - 120 + elem.width() / 2;
+              Redactor.prototype.linkShow(offset);
+            }
+            selection = window.getSelection == null ? window.getSelection() : document.getSelection();
+            if (selection.type === 'Range') {
+              toolbar = $(this).prev();
+              Redactor.prototype.toolbar = toolbar;
+              Redactor.prototype.toolbarPosition(toolbar);
+            } else {
+              element.parent().find('.redactor-toolbar').hide();
+            }
           }
         });
       };
@@ -513,6 +556,7 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
             if ($.trim($(this).redactor('code.get')) === "") {
               Redactor.prototype.removeRedactor($(this));
             } else {
+              app.codeSave.add($.trim($(this).redactor('code.get')), "text");
               $(this).redactor("core.destroy");
             }
           }
@@ -591,7 +635,7 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
               }).find(".redactor-act").removeClass("redactor-act");
             }
           }
-          toolbar.find(".re-header1, .re-header2, .re-link").removeClass("redactor-act");
+          toolbar.find(".redactor-act").removeClass("redactor-act");
           $("#link-toolbar").removeClass("active");
           if (Redactor.prototype.redactor.selection.getHtml().indexOf("<sup") !== -1 || Redactor.prototype.redactor.selection.getParent().tagName.toLowerCase() === "sup") {
             toolbar.find(".re-header1").addClass("redactor-act");
@@ -602,6 +646,21 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
           if (Redactor.prototype.redactor.selection.getHtml().indexOf("<a") !== -1 || Redactor.prototype.redactor.selection.getParent().tagName.toLowerCase() === "a") {
             toolbar.find(".re-link").addClass("redactor-act");
           }
+          if (Redactor.prototype.redactor.selection.getHtml().indexOf("<strong") !== -1 || Redactor.prototype.redactor.selection.getParent().tagName.toLowerCase() === "strong") {
+            toolbar.find(".re-bold").addClass("redactor-act");
+          }
+          if (Redactor.prototype.redactor.selection.getHtml().indexOf("<em") !== -1 || Redactor.prototype.redactor.selection.getParent().tagName.toLowerCase() === "em") {
+            toolbar.find(".re-italic").addClass("redactor-act");
+          }
+          if (Redactor.prototype.redactor.selection.getHtml().indexOf("<del") !== -1 || Redactor.prototype.redactor.selection.getParent().tagName.toLowerCase() === "del") {
+            toolbar.find(".re-deleted").addClass("redactor-act");
+          }
+          if (Redactor.prototype.redactor.selection.getHtml().indexOf("<blockquote") !== -1 || Redactor.prototype.redactor.selection.getParent().tagName.toLowerCase() === "blockquote") {
+            toolbar.find(".re-blockquote").addClass("redactor-act");
+          }
+          if (Redactor.prototype.redactor.selection.getHtml().indexOf("<center") !== -1 || Redactor.prototype.redactor.selection.getParent().tagName.toLowerCase() === "center") {
+            toolbar.find(".re-alignment").addClass("redactor-act");
+          }
         }
       };
 
@@ -611,6 +670,8 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
 
     })();
     redactor = new Redactor(_docum, '.sub-section');
+    codeSave = new CodeSave();
     app.Editor = redactor.init();
+    app.codeSave = codeSave.init();
   });
 });

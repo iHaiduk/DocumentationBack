@@ -8,11 +8,11 @@ routes = {
       HomeController.prototype.run(req, res);
     }
   },
-  about: {
-    type: 'get',
-    link: '/about',
+  save: {
+    type: 'post',
+    link: '/save',
     control: function(req, res) {
-      console.log('Page about');
+      HomeController.prototype.save(req, res);
     }
   }
 };
@@ -24,8 +24,8 @@ module.exports = Routes = (function() {
     var i, page;
     for (i in routes) {
       page = routes[i];
+      console.log(page);
       app[page.type](page.link, page.control);
-      return;
     }
   };
 
