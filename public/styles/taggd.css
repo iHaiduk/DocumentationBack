@@ -1,0 +1,103 @@
+
+.taggd-wrapper {
+	margin-bottom: 20px;
+	position: relative;
+}
+
+.taggd-wrapper .taggd-item {
+    background-color: rgba(219, 50, 92, 0.75);
+	cursor: pointer;
+	display: block;
+	padding: 10px;
+	z-index: 1000;
+
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+
+    -webkit-transition: background-color 0.2s;
+    -moz-transition: background-color 0.2s;
+    transition: background-color 0.2s;
+}
+
+.taggd-wrapper .taggd-item.active,
+.taggd-wrapper .taggd-item:hover { background-color: rgba(219, 50, 92, 0.75); }
+.taggd-wrapper .taggd-item:before {
+	-webkit-transition: opacity .2s ease 50ms;
+	-moz-transition: opacity .2s ease 50ms;
+	transition: opacity .2s ease 50ms;
+	opacity: 0;
+	visibility: hidden;
+}
+.taggd-wrapper .taggd-item.active:before{
+	content: ''; position: absolute;
+	top: -30px; left: 50%;
+	margin-left: -5px;
+	width: 10px;
+	height: 10px;
+	opacity: 1;
+	visibility: visible;
+	background-color: #262625;
+	-webkit-transform: rotate(45deg);
+	transform: rotate(45deg);
+}
+
+.taggd-wrapper .taggd-item-hover {
+	display: block;
+	max-width: 230px;
+	text-align: center;
+	word-break: break-all;
+	white-space: nowrap;
+	background-image: linear-gradient(to bottom, rgba(49, 49, 47, 0.99), #262625);
+	color: #fff;
+	font-size: 16px;
+	cursor: default;
+	opacity: 0;
+	visibility: hidden;
+	padding: 11px 10px;
+	z-index: 999;
+	border-radius: 5px;
+
+	-webkit-transition: opacity .2s ease 50ms;
+	-moz-transition: opacity .2s ease 50ms;
+	transition: opacity .2s ease 50ms;
+}
+
+.taggd-wrapper .taggd-item-hover.show {
+	opacity: 1;
+	visibility: visible;
+	z-index: 1000;
+}
+
+.taggd-wrapper .taggd-item-hover input {
+	width: 150px;
+	background-color: transparent;
+	border: 0;
+	margin: 0;
+	outline: 0;
+	padding: 0;
+	color: #fff;
+	font-size: 16px;
+}
+
+.taggd-wrapper .taggd-item-hover button {
+	width: 18px;
+	height: 18px;
+	border: 0;
+	margin: 0 0 0 10px;
+	padding: 0;
+	vertical-align: top;
+	text-indent: -9999px;
+	outline: none;
+	cursor: pointer;
+}
+.taggd-wrapper .taggd-item-hover button:last-of-type {
+	background: url("../img/del.svg") center no-repeat; background-size: 20px 20px;
+}
+.taggd-wrapper .taggd-item-hover button:first-of-type {
+	background: url("../img/add.svg") center no-repeat; background-size: 18px 18px;
+}
+
+.taggd-wrapper .taggd-editor {
+	position: absolute;
+}

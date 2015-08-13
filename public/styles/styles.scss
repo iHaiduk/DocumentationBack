@@ -1,0 +1,396 @@
+@import "_variables.scss";
+@import "_mixin.scss";
+
+/*clear fix*/
+.cf:before,
+.cf:after {
+  content: '';
+  display: table;
+}
+.cf:after {
+  clear: both;
+}
+/*clear fix*/
+
+html * { margin: 0; padding: 0;
+
+    @include prefix( ( box-sizing: border-box ), webkit moz );
+
+}
+
+html, body { height: 100%; }
+
+body { padding-top: 104px; margin: 0; font-family: "Verdana"; background: $white; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; overflow-x: hidden;
+
+    @include custom_breakpoint(800) { overflow-x: auto; }
+
+    &.noScroll { overflow: hidden; }
+
+}
+
+img { vertical-align: top; max-width: 100%; }
+
+.wrap { max-width: 1400px; min-width: 768px; margin: 0 auto; }
+
+.main { min-height: 100%; margin-bottom: -50px; position: relative; font-size: 0;
+
+    .left-side { display: inline-block; width: 30%; padding: 7px 7% 0 15px; vertical-align: top; font-size: 16px; }
+
+    .right-side { @extend .left-side; width: 70%; padding: 0 15px 0 0; }
+
+    &:after { content: ''; display: block; height: 50px; }
+
+}
+
+.header { position: fixed; top: 0; left: 0; right: 0; height: 60px; padding-top: 12px; background: $white; z-index: 99; box-shadow: 0 0 10px #eee;
+
+    .subject { position: absolute; top: 0; left: 20px; font-size: 15px; color: #484848; text-decoration: none; line-height: 60px;
+
+        @include custom_breakpoint(1635) { line-height: 36px; }
+
+    }
+
+    .user { @extend .subject; left: auto; right: 10px; top: 12px; margin: 0; width: 36px; height: 36px; border: 1px solid #DEDEDE; border-radius: 100%; overflow: hidden;
+
+        @include custom_breakpoint(1635) { top: 0; }
+
+    }
+
+    .wrap {
+
+        @include custom_breakpoint(1635) { max-width: 100%; padding: 0 53px 0 110px; position: relative; }
+
+    }
+
+}
+
+.search { float: right; width: 25%; padding-left: 45px;
+
+    .search-wrap { position: relative;
+
+        .search-submit { position: absolute; top: 0; left: 0; width: 38px; height: 36px; background: url("../img/search.svg") center no-repeat; background-size: 22px; text-indent: -9999px; border: none;
+
+            outline: none; cursor: pointer; }
+
+        .search-text { width: 100%; outline: none; height: 36px; padding: 0 5px 0 35px; border: 1px solid fade-out($black, .85); border-radius: 20px; font-family: "Verdana";
+
+            @include prefix(( transition: all .2s ease ), webkit );
+
+            &:hover { border-color: fade-out($black, .7); }
+
+            &:focus { border-color: fade-out($black, .4); }
+
+        }
+
+    }
+
+}
+
+.btn-plus-wrap { height: 0; text-align: center;
+
+    @include prefix(( transition: all .2s ease ), webkit );
+
+}
+
+.editing .btn-plus-wrap { height: 72px; padding: 20px 0; }
+
+.btn { display: inline-block; vertical-align: top; position: relative; height: 36px; padding: 0 16px; color: fade-out($black, .56); background-color: transparent; font-size: 14px; text-align: center;
+
+    text-decoration: none; cursor: pointer; border: 1px solid #D9D9D9; white-space: nowrap; border-radius: 20px; line-height: 36px;
+
+    @include prefix(( transition: all .2s ease ), webkit );
+
+    @include prefix(( user-select: none ), webkit moz ms );
+
+    &.btn-product { float: left; width: 25%; width: calc( 25% - 45px ); }
+
+    &.icon-plus { background-image: url("../img/plus.svg"); }
+
+    &.icon-image { background-image: url("../img/image.svg"); }
+
+    &.icon-video { background-image: url("../img/video.svg"); }
+
+    &.icon-code { background-image: url("../img/code.svg"); }
+
+    &.icon-hr { background-image: url("../img/empty.svg"); }
+
+    &.remove { position: absolute; top: 0; left: -55px; width: 30px; height: 30px; padding: 0; background-size: 100%; background-color: $white; border: none; background-image: url("../img/plus.svg");
+
+        opacity: .6;
+
+        @include prefix(( transform: rotate(45deg)), webkit );
+
+        &:hover { opacity: 1; }
+
+    }
+
+    &.btn-accept { float: right; width: 80px; margin-right: -37px;
+
+        &.btn-edit {
+
+            &:after { content: 'Edit'; }
+
+        }
+
+        &.btn-save {
+
+            &:after { content: 'Save'; }
+
+        }
+
+    }
+
+    &:hover { color: fade-out($black, .4); border-color: fade-out($black, .7); }
+
+    &:active { color: fade-out($black, .2); border-color: fade-out($black, .4); }
+
+}
+
+.media-toolbar { display: none; position: absolute; top: 0; left: 0; margin-left: -55px; z-index: 1; height: 30px; overflow: hidden;
+
+    .btn { width: 30px; height: 30px; padding: 0; background-size: 100%; background-color: $white; border: none; opacity: .6;
+
+        &:hover { opacity: 1; }
+
+    }
+
+    &.active { display: block; }
+
+    .btn-toggle { font-size: 26px; line-height: 26px;
+
+        @include prefix(( transition: transform .2s linear ), webkit );
+
+        &.open {
+
+            @include prefix(( transform: rotate(45deg)), webkit );
+
+        }
+
+        &.open + .menu-toolbar { visibility: visible; width: auto; padding-left: 20px;
+
+            .btn {
+
+                @include prefix(( transform: scale(1), transition: transform .2s ease ), webkit );
+
+            }
+
+        }
+
+    }
+
+    .menu-toolbar { visibility: hidden; display: inline-block; vertical-align: top; background: #fff; width: 0;
+
+        .btn { margin-right: 10px; line-height: 30px;
+
+            @include prefix((transform: scale(0), transition: none), webkit );
+
+            &:last-child { margin: 0; }
+
+            @for $i from 2 through 4 {
+
+                &:nth-child(#{$i}) {
+
+                    @include prefix((transition-delay: $delay + ($delay * ($i - 2)) !important), webkit );
+
+                }
+
+            }
+
+        }
+
+    }
+
+}
+
+.link { opacity: 0; visibility: hidden; position: absolute; top: 0; left: 0; z-index: 1;  width: 282px; background-image: linear-gradient(to bottom, rgba(49, 49, 47, 0.99), #262625); border-radius: 5px;
+
+    @include prefix(( transition: opacity .2s ease 50ms), webkit );
+
+    &.active { opacity: 1; visibility: visible; }
+
+    .link-val { width: 100%; height: 42px; padding: 10px 40px 10px 10px; background-color: transparent; border: none; outline: none; color: #fff; font-size: 16px; }
+
+    .close { position: absolute; top: 11px; right: 8px; width: 20px; height: 20px; background: url("../img/close.svg") center no-repeat; background-size: 10px 10px; cursor: pointer; }
+
+    &:after { content: ''; position: absolute; bottom: -5px; left: 50%; margin-left: -5px; width: 10px; height: 10px; background-color: #262625;
+
+        @include prefix(( transform: rotate(45deg)), webkit );
+
+    }
+
+}
+
+body:not(.editing) {
+
+    .media-toolbar { display: none; }
+
+    .language-list { display: none; }
+
+    .empty:before { display: none !important; }
+
+    .remove { display: none; }
+
+    a[href=""] { text-decoration: none; color: rgba(0, 0, 0, 0.95) !important; cursor: text; }
+
+    .CodeMirror-cursors { visibility: hidden !important; }
+
+}
+
+.footer { height: 50px; padding-top: 5px; background: #f2f2f2; color: #484848; position: relative;
+
+    .footer-text { margin: 0; padding: 0 15px; line-height: 20px; font-size: 14px; }
+
+}
+
+.nav { padding: 0; margin: 0; list-style-type: none;
+
+    .nav-item { display: block; padding: 0 20px; color: #000; text-decoration: none; font: 14px "Open Sans", serif; font-weight: 600; line-height: 30px; white-space: nowrap; overflow: hidden;
+
+        text-overflow: ellipsis; position: relative;
+
+        @include prefix(( transition: all .2s ease ), webkit );
+
+        &:hover { box-shadow: inset -1px 0 $blue; color: $blue; }
+
+    }
+
+    li.active {
+
+      > .nav-item { color: $blue; box-shadow: inset -1px 0 $blue }
+
+    }
+
+
+    .sub-nav { margin: 0; padding: 0; list-style-type: none;
+
+        .nav-item { padding: 0 30px; }
+
+    }
+
+    > .nav-list {
+
+        .nav-list { height: 0; overflow: hidden;
+
+            @include prefix(( transition: all .2s ease 50ms ), webkit );
+
+        }
+
+        &.active {
+
+            .nav-list { height: 30px; }
+
+        }
+
+    }
+
+}
+
+.view { position: relative;
+
+    .section-wrap {
+
+        .section { position: relative;
+
+            .sub-section {
+
+                p { font-size: 16px; line-height: 24px; color: fade-out($black, .05); margin: 0 0 20px 0;
+
+                    &.empty:before { content: 'Text...'; color: fade-out($black, .7); position: absolute; z-index: -1; margin-left: 1px; }
+
+                }
+
+                sup { color: fade-out($black, .2); font-size: 40px; position: relative; line-height: 1; vertical-align: baseline;
+
+                    strong { font-weight: normal; }
+
+                    &.empty:before { content: 'Text...'; color: fade-out($black, .7); position: absolute; z-index: -1; margin-left: 1px;  }
+
+                }
+
+                sub { @extend sup; font-size: 30px; line-height: 1.2; }
+
+                hr { height: 30px; margin: 0; border: none; }
+
+                a { color: #15c; }
+
+                .CodeMirror { margin: 30px 0; }
+
+                .language-list { position: absolute; top: -30px; left: 0; padding: 0; margin: 0; z-index: 2; list-style-type: none; font-size: 0;
+
+                    .language { display: inline-block; padding: 4px 10px; vertical-align: top; margin-right: 2px; font-size: 14px; background: $black; color: $white; cursor: pointer;
+
+                        &.active { background: #F7F7F7; color: $black; cursor: default; }
+
+                        &:last-child { margin: 0; }
+
+                    }
+
+                }
+
+                .video { width: 50%; height: 24px; padding: 0 10px; border: none; outline: none; font-size: 16px; color: #fff; margin-bottom: 20px;
+
+                    background-image: linear-gradient(to bottom, rgba(49, 49, 47, 0.99), #262625);
+
+                }
+
+            }
+
+        }
+
+    }
+
+    #form1 { display: none; }
+
+}
+
+.editing .section:hover .btn-plus { visibility: visible; opacity: 1; top: 0; }
+
+.popup { visibility: hidden; position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0; z-index: -1; background: $white; overflow: auto;
+
+    @include prefix(( transition: all .5s ease ), webkit );
+
+    &.visible { visibility: visible; opacity: 1; z-index: 10000; }
+
+    .close { position: absolute; top: 20px; right: 20px; cursor: pointer; width: 30px; height: 30px; text-indent: -9999px; opacity: .5; background: url("../img/plus.svg"); background-size: 30px 30px;
+
+        @include prefix(( transform: rotate(45deg)), webkit );
+
+        @include prefix(( transition: opacity .3s ease ), webkit );
+
+        &:hover { opacity: 1; }
+
+    }
+
+    .popup-title { margin: 30px 0 15px; font-size: 30px; text-align: center; }
+
+}
+
+.product-list { padding: 0 20px; font-size: 0;
+
+    .product-item { display: inline-block; width: 21%; height: 200px; margin: 2%; position: relative; text-decoration: none; background: url("http://placecreature.com/300/200") center no-repeat;
+
+        overflow: hidden; background-size: cover; vertical-align: top;
+
+        @include prefix(( flex: 1 ), webkit moz ms);
+
+        .product-name { position: absolute; top: 20px; left: 0; font-size: 20px; background: $black; color: $white; padding: 4px 12px; max-width: 100%; white-space: nowrap; text-overflow: ellipsis;
+
+            overflow: hidden;
+
+            &:hover { text-shadow: 0 0 1px $white; }
+
+            @include prefix(( transition: all .3s ease ), webkit);
+
+        }
+
+        .product-data { @extend .product-name; top: auto; bottom: 0; font-size: 16px;
+
+            @include prefix(( transform: translate3d(0, 100%, 0) ), webkit moz ms);
+
+        }
+
+        &:hover .product-data { @include prefix(( transform: translate3d(0, -20px, 0) ), webkit moz ms); }
+
+    }
+
+}
