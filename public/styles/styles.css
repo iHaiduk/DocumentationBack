@@ -330,10 +330,6 @@ body:not(.editing) .empty:before {
   display: none !important; }
 body:not(.editing) .remove {
   display: none; }
-body:not(.editing) a[href=""] {
-  text-decoration: none;
-  color: rgba(0, 0, 0, 0.95) !important;
-  cursor: text; }
 body:not(.editing) .CodeMirror-cursors {
   visibility: hidden !important; }
 
@@ -437,6 +433,10 @@ body:not(.editing) .CodeMirror-cursors {
         border: none; }
       .view .section-wrap .section .sub-section a {
         color: #15c; }
+      .view .section-wrap .section .sub-section a[href=""] {
+        text-decoration: none;
+        color: rgba(0, 0, 0, 0.95) !important;
+        cursor: text; }
       .view .section-wrap .section .sub-section blockquote {
         margin: 20px 0;
         padding: 6px 0 6px 20px;
