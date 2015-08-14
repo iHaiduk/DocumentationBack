@@ -38,20 +38,19 @@ class HomeController
       )
     return
 
-  save: (req, res)->
-    console.log(req.body)
-    console.log(JSON.parse(req.body))
-    if req.body[0]?
-      code = req.body[0].code
-      console.log(code)
-      return
-      Page.findOne({page_id: 1}, (err, page)->
-        console.log(page, code)
-        page.code = code
-        page.save (err)->
+  save: (req, res) ->
+    code = undefined
+    if req.body != null
+      post = JSON.parse(req.body.code)
+      Page.findOne { page_id: 1 }, (err, page) ->
+        page.code = post.code
+        page.save (err) ->
+          v = undefined
           v = new View(res)
-          console.log(result)
-          v.send({answ: true})
-    )
+          console.log result
+          v.send answ: true
+          return
+        return
+    return
 
 module.exports = HomeController

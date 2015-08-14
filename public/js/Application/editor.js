@@ -85,6 +85,14 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
           this.insert.html(this.selection.getText(), false);
           this.code.sync();
           this.observe.load();
+        },
+        save: function() {
+          app.codeSave.clean();
+          Redactor.prototype.document.find("#initRedactor").removeClass("btn-save").addClass("btn-edit");
+          $("body").removeClass("editing");
+          Redactor.prototype.save();
+          app.Image.save();
+          app.codeSave.send();
         }
       };
     };
@@ -115,7 +123,7 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
       };
 
       CodeSave.prototype.send = function() {
-        $.ajax({
+        return $.ajax({
           url: "/save",
           type: "post",
           data: {
@@ -126,7 +134,6 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
             return console.log(res);
           }
         });
-        return console.log(CodeSave.prototype.code);
       };
 
       return CodeSave;
@@ -368,6 +375,9 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
             shortcutsAdd: {
               'ctrl+enter': {
                 func: 'insertHead.newRedactor'
+              },
+              'ctrl+s': {
+                func: 'insertHead.save'
               }
             },
             initCallback: function() {

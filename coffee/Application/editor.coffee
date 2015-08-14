@@ -89,7 +89,14 @@ define [
         @code.sync()
         @observe.load()
         return
-
+      save: ->
+        app.codeSave.clean()
+        Redactor::document.find("#initRedactor").removeClass("btn-save").addClass "btn-edit"
+        $("body").removeClass "editing"
+        Redactor::save()
+        app.Image.save()
+        app.codeSave.send()
+        return
       }
 
     class CodeSave
@@ -120,7 +127,6 @@ define [
           success: (res)->
             console.log(res)
         )
-        console.log(CodeSave::code)
 
     class Redactor
       constructor: (document, nameElement) ->
@@ -356,7 +362,11 @@ define [
             tabAsSpaces: 4
             buttons: ['bold', 'italic', 'deleted']
             plugins: ['insertHead']
-            shortcutsAdd: 'ctrl+enter': func: 'insertHead.newRedactor'
+            shortcutsAdd:
+              'ctrl+enter':
+                func: 'insertHead.newRedactor'
+              'ctrl+s':
+                func: 'insertHead.save'
             initCallback: ->
               Redactor::redactor = @
               @code.set(code) if code?

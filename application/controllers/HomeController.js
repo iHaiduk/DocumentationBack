@@ -49,16 +49,17 @@ HomeController = (function() {
   };
 
   HomeController.prototype.save = function(req, res) {
-    var code;
-    if (req.body != null) {
-      code = req.body.code.code;
-      return Page.findOne({
+    var code, post;
+    code = void 0;
+    if (req.body !== null) {
+      post = JSON.parse(req.body.code);
+      Page.findOne({
         page_id: 1
       }, function(err, page) {
-        console.log(page, code);
-        page.code = code;
+        page.code = post.code;
         page.save(function(err) {
           var v;
+          v = void 0;
           v = new View(res);
           console.log(result);
           v.send({
