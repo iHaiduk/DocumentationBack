@@ -1,3 +1,4 @@
+_local = @
 define [
   'jquery'
   'taggd'
@@ -8,47 +9,60 @@ define [
 
     class ImageTolltip
       constructor: (document, nameElement) ->
-        ImageTolltip::tag = null
-        ImageTolltip::data = []
+        ImageTolltip::tag = _docum.find('.taggd')
+        ImageTolltip::data = _local.dataImages
         ImageTolltip::option =
           align: y: 'bottom'
           offset: top: -35
           handlers:
+            mouseenter: 'show',
+            mouseleave: 'hide',
             click: 'toggle'
 
       ImageTolltip::init = ->
-        if _docum.find('.taggd').length
-          ImageTolltip::tag = _docum.find('.taggd').taggd ImageTolltip::option, ImageTolltip::data
+        if ImageTolltip::tag.length
+          ImageTolltip::tag.each ->
+            $(@).taggd $.extend(true, ImageTolltip::option,{edit:false}), ImageTolltip::data[$(@).attr("id")] if ImageTolltip::data[$(@).attr("id")]?
+            return
         @
+
+      ImageTolltip::add = (elem)->
+        ImageTolltip::tag = _docum.find('.taggd')
+        if elem.length
+          ImageTolltip::data[elem.attr("id")] = []
+          elem.taggd $.extend(true, ImageTolltip::option,{edit:true}), ImageTolltip::data[elem.attr("id")]
+        return
 
       ImageTolltip::edit = ->
         ImageTolltip::destroy()
-        options =
-          edit: true
-          align: y: 'bottom'
-          offset: top: -35
-          handlers:
-            click: 'toggle'
-        if ImageTolltip::tag?
-          ImageTolltip::tag = ImageTolltip::tag.taggd options, ImageTolltip::data
-          ImageTolltip::tag.on 'change', ->
-            ImageTolltip::data = ImageTolltip::tag.data
+        ImageTolltip::tag.each ->
+          ImageTolltip::data[$(@).attr("id")] = if ImageTolltip::data[$(@).attr("id")]? then ImageTolltip::data[$(@).attr("id")] else []
+          _t = $(@).taggd $.extend(true, ImageTolltip::option,{edit:true}), ImageTolltip::data[$(@).attr("id")] if ImageTolltip::data[$(@).attr("id")]?
+          _t.on 'change', ->
+            ImageTolltip::data[$(@).attr("id")] = _t.data
+            return
+          return
+        return
 
       ImageTolltip::save = ->
         ImageTolltip::destroy()
-        if ImageTolltip::tag?
-          ImageTolltip::tag.taggd ImageTolltip::option, ImageTolltip::data
+        ImageTolltip::init()
+        return
 
       ImageTolltip::destroy = ->
         if ImageTolltip::tag?
-          if ImageTolltip::tag.wrapper?
-            img = ImageTolltip::tag.wrapper.find("img")
-          else
-            img = ImageTolltip::tag
-          img.parents(".sub-section").html(img)
-          ImageTolltip::tag = img
+          ImageTolltip::tag.each ->
+            if $(@).wrapper?
+              img = $(@).wrapper.find("img")
+            else
+              img = $(@)
+            img.parents(".sub-section").html(img)
+            ImageTolltip::tag = _docum.find('.taggd')
+            return
+        return
 
 
 
     image = new ImageTolltip()
     app.Image = image.init()
+    return

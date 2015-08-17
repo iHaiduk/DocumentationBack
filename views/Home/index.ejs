@@ -11,7 +11,9 @@
     <link rel="stylesheet" href="/styles/taggd.css">
     <link rel="stylesheet" href="/styles/lazyYT.css">
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600' rel='stylesheet' type='text/css'>
-
+    <script>
+        var dataImages = {};
+    </script>
 </head>
 <body>
 
@@ -41,7 +43,10 @@
                 <div class="section" data-type="<%=html[i].param%>">
                     <div class="sub-section <%if(html[i].param!="text"){%><%= "noRedactor" %><%} %>">
                         <%if(html[i].param=="image"){%>
-                            <img src="<%- html[i].code %>" class="image" />
+                            <img src="<%- html[i].code %>" class="image taggd" id="<%- html[i].data.id %>" />
+                            <script>
+                                dataImages["<%- html[i].data.id %>"] =  <%- JSON.stringify(html[i].data.data) %>;
+                            </script>
                         <%}else if(html[i].param=="video"){%>
                             <div class="videoView" data-youtube-id='<%= html[i].code %>' data-ratio="16:9"></div>
                         <%}else if(html[i].param=="code"){%>

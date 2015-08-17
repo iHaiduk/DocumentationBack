@@ -1,3 +1,7 @@
+var _local;
+
+_local = this;
+
 define(['jquery', 'taggd', 'Application/editor'], function($, taggd) {
   var _docum;
   _docum = $(document);
@@ -5,8 +9,8 @@ define(['jquery', 'taggd', 'Application/editor'], function($, taggd) {
     var ImageTolltip, image;
     ImageTolltip = (function() {
       function ImageTolltip(document, nameElement) {
-        ImageTolltip.prototype.tag = null;
-        ImageTolltip.prototype.data = [];
+        ImageTolltip.prototype.tag = _docum.find('.taggd');
+        ImageTolltip.prototype.data = _local.dataImages;
         ImageTolltip.prototype.option = {
           align: {
             y: 'bottom'
@@ -15,58 +19,69 @@ define(['jquery', 'taggd', 'Application/editor'], function($, taggd) {
             top: -35
           },
           handlers: {
+            mouseenter: 'show',
+            mouseleave: 'hide',
             click: 'toggle'
           }
         };
       }
 
       ImageTolltip.prototype.init = function() {
-        if (_docum.find('.taggd').length) {
-          ImageTolltip.prototype.tag = _docum.find('.taggd').taggd(ImageTolltip.prototype.option, ImageTolltip.prototype.data);
+        if (ImageTolltip.prototype.tag.length) {
+          ImageTolltip.prototype.tag.each(function() {
+            if (ImageTolltip.prototype.data[$(this).attr("id")] != null) {
+              $(this).taggd($.extend(true, ImageTolltip.prototype.option, {
+                edit: false
+              }), ImageTolltip.prototype.data[$(this).attr("id")]);
+            }
+          });
         }
         return this;
       };
 
-      ImageTolltip.prototype.edit = function() {
-        var options;
-        ImageTolltip.prototype.destroy();
-        options = {
-          edit: true,
-          align: {
-            y: 'bottom'
-          },
-          offset: {
-            top: -35
-          },
-          handlers: {
-            click: 'toggle'
-          }
-        };
-        if (ImageTolltip.prototype.tag != null) {
-          ImageTolltip.prototype.tag = ImageTolltip.prototype.tag.taggd(options, ImageTolltip.prototype.data);
-          return ImageTolltip.prototype.tag.on('change', function() {
-            return ImageTolltip.prototype.data = ImageTolltip.prototype.tag.data;
-          });
+      ImageTolltip.prototype.add = function(elem) {
+        ImageTolltip.prototype.tag = _docum.find('.taggd');
+        if (elem.length) {
+          ImageTolltip.prototype.data[elem.attr("id")] = [];
+          elem.taggd($.extend(true, ImageTolltip.prototype.option, {
+            edit: true
+          }), ImageTolltip.prototype.data[elem.attr("id")]);
         }
+      };
+
+      ImageTolltip.prototype.edit = function() {
+        ImageTolltip.prototype.destroy();
+        ImageTolltip.prototype.tag.each(function() {
+          var _t;
+          ImageTolltip.prototype.data[$(this).attr("id")] = ImageTolltip.prototype.data[$(this).attr("id")] != null ? ImageTolltip.prototype.data[$(this).attr("id")] : [];
+          if (ImageTolltip.prototype.data[$(this).attr("id")] != null) {
+            _t = $(this).taggd($.extend(true, ImageTolltip.prototype.option, {
+              edit: true
+            }), ImageTolltip.prototype.data[$(this).attr("id")]);
+          }
+          _t.on('change', function() {
+            ImageTolltip.prototype.data[$(this).attr("id")] = _t.data;
+          });
+        });
       };
 
       ImageTolltip.prototype.save = function() {
         ImageTolltip.prototype.destroy();
-        if (ImageTolltip.prototype.tag != null) {
-          return ImageTolltip.prototype.tag.taggd(ImageTolltip.prototype.option, ImageTolltip.prototype.data);
-        }
+        ImageTolltip.prototype.init();
       };
 
       ImageTolltip.prototype.destroy = function() {
-        var img;
         if (ImageTolltip.prototype.tag != null) {
-          if (ImageTolltip.prototype.tag.wrapper != null) {
-            img = ImageTolltip.prototype.tag.wrapper.find("img");
-          } else {
-            img = ImageTolltip.prototype.tag;
-          }
-          img.parents(".sub-section").html(img);
-          return ImageTolltip.prototype.tag = img;
+          ImageTolltip.prototype.tag.each(function() {
+            var img;
+            if ($(this).wrapper != null) {
+              img = $(this).wrapper.find("img");
+            } else {
+              img = $(this);
+            }
+            img.parents(".sub-section").html(img);
+            ImageTolltip.prototype.tag = _docum.find('.taggd');
+          });
         }
       };
 
@@ -74,6 +89,6 @@ define(['jquery', 'taggd', 'Application/editor'], function($, taggd) {
 
     })();
     image = new ImageTolltip();
-    return app.Image = image.init();
+    app.Image = image.init();
   });
 });

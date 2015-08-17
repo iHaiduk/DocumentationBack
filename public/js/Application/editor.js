@@ -121,7 +121,6 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
       CodeSave.prototype.add = function() {
         _docum.find(".section").each(function() {
           var code, data, param_id, sub, type;
-          console.log(this);
           type = $(this).data().type;
           sub = $(this).find(".sub-section");
           data = {};
@@ -129,6 +128,14 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
             case "image":
               if (!sub.hasClass("deleted")) {
                 code = sub.find(".image").attr("src");
+                data = {
+                  id: sub.find(".image").attr("id"),
+                  data: $.map(app.Image.data[sub.find(".image").attr("id")], function(a) {
+                    if ($.trim(a.text).length) {
+                      return a;
+                    }
+                  })
+                };
               }
               break;
             case "video":
@@ -140,7 +147,6 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
             case "code":
               param_id = $(this).find(".code").attr("id").replace("#", "");
               code = Redactor.prototype.CodeMirror[param_id].getValue();
-              console.log(Redactor.prototype.CodeMirror[param_id].getMode().name);
               data = {
                 type: Redactor.prototype.CodeMirror[param_id].getMode().name === "sql" ? "text/x-mysql" : Redactor.prototype.CodeMirror[param_id].getMode().name,
                 id: param_id
@@ -169,8 +175,7 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
           data: {
             code: JSON.stringify(CodeSave.prototype.code)
           },
-          dataType: "json",
-          success: function(res) {}
+          dataType: "json"
         });
       };
 
@@ -203,7 +208,7 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
         };
         Redactor.prototype.template = {
           empty: "<div class=\"section\" data-type=\"text\">\n    <div class=\"sub-section\"></div>\n</div>",
-          image: "<form id=\"form1\" runat=\"server\">\n<label for='imgInp' id='uploadImage'></label>\n    <input type='file' id=\"imgInp\" />\n</form>\n    <img src=\"\" class=\"image\" />",
+          image: "<form id=\"form1\" runat=\"server\">\n<label for='imgInp' id='uploadImage'></label>\n    <input type='file' id=\"imgInp\" />\n</form>\n    <img src=\"\" class=\"image taggd\" />",
           code: "<textarea class='code' data-mode='htmlmixed'></textarea><ul class=\"language-list\" >\n<li class=\"language active\" data-type=\"htmlmixed\">HTML</li>\n<li class=\"language\" data-type=\"CSS\">CSS</li>\n<li class=\"language\" data-type=\"SASS\">SASS</li>\n<li class=\"language\" data-type=\"JavaScript\">JavaScript</li>\n<li class=\"language\" data-type=\"coffeescript\">CoffeeScript</li>\n<li class=\"language\" data-type=\"PHP\">PHP</li>\n<li class=\"language\" data-type=\"text/x-mysql\">SQL</li>\n</ul>",
           video: "<input class='video' type='text' placeholder='Please insert youtube ID...' />",
           hr: "<hr/>"
@@ -224,9 +229,8 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
             $("body").removeClass("editing");
             Redactor.prototype.save();
             app.Image.save();
-            setTimeout(function() {
-              return app.codeSave.send();
-            }, 10);
+            _docum.find(".selected").removeClass("selected");
+            app.codeSave.send();
           }
         });
         Redactor.prototype.document.find(".code").each(function() {
@@ -242,6 +246,7 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
         Redactor.prototype.addListen();
         Redactor.prototype.changeTypeListen();
         app.Video.activate(parent.find(".videoView"));
+        app.Image.init();
       };
 
       Redactor.prototype.reset = function() {
@@ -290,7 +295,11 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
             reader.onload = function(e) {
               parent.removeClass("deleted");
               $("#form1").remove();
-              element.attr("src", e.target.result);
+              element.attr({
+                src: e.target.result,
+                id: "image_" + (new Date).getTime()
+              });
+              app.Image.add(element);
             };
             reader.readAsDataURL(file);
           });
@@ -489,8 +498,7 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
               }
             },
             keyupCallback: function(e) {
-              var aselect, key;
-              key = e.which;
+              var aselect;
               if (e.keyCode === 8 && Redactor.prototype.lastSectionRemove) {
                 Redactor.prototype.lastSectionRemove = false;
                 return false;

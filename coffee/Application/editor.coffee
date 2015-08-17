@@ -121,7 +121,6 @@ define [
 
       CodeSave::add = ()->
         _docum.find(".section").each ->
-          console.log(@)
           type = $(@).data().type
           sub = $(@).find(".sub-section")
           data = {}
@@ -129,6 +128,11 @@ define [
             when "image"
               if !sub.hasClass("deleted")
                 code = sub.find(".image").attr("src")
+                data =
+                  id: sub.find(".image").attr("id")
+                  data: $.map app.Image.data[sub.find(".image").attr("id")], (a)->
+                    if $.trim(a.text).length
+                      a
             when "video"
               code = sub.find(".videoView").data().youtubeId
             when "hr"
@@ -136,7 +140,6 @@ define [
             when "code"
               param_id = $(@).find(".code").attr("id").replace("#","")
               code = Redactor::CodeMirror[param_id].getValue()
-              console.log Redactor::CodeMirror[param_id].getMode().name
               data =
                 type: if Redactor::CodeMirror[param_id].getMode().name is "sql" then "text/x-mysql" else Redactor::CodeMirror[param_id].getMode().name
                 id: param_id
@@ -154,14 +157,11 @@ define [
       CodeSave::send = ->
         CodeSave::clean()
         CodeSave::add()
-        #console.log CodeSave::code
         $.ajax(
           url: "/save"
           type: "post"
           data: { code: JSON.stringify(CodeSave::code) }
           dataType: "json"
-          success: (res)->
-            #console.log(res)
         )
 
     class Redactor
@@ -193,7 +193,7 @@ define [
 <label for='imgInp' id='uploadImage'></label>
     <input type='file' id="imgInp" />
 </form>
-    <img src="" class="image" />"""
+    <img src="" class="image taggd" />"""
           code: """<textarea class='code' data-mode='htmlmixed'></textarea><ul class="language-list" >
           <li class="language active" data-type="htmlmixed">HTML</li>
           <li class="language" data-type="CSS">CSS</li>
@@ -221,9 +221,8 @@ define [
             $("body").removeClass "editing"
             Redactor::save()
             app.Image.save()
-            setTimeout ->
-              app.codeSave.send()
-            ,10
+            _docum.find(".selected").removeClass("selected")
+            app.codeSave.send()
           return
 
         Redactor::document.find(".code").each ->
@@ -240,6 +239,7 @@ define [
         Redactor::addListen()
         Redactor::changeTypeListen()
         app.Video.activate(parent.find(".videoView"))
+        app.Image.init()
         return
 
       Redactor::reset = ()->
@@ -290,7 +290,10 @@ define [
             reader.onload = (e)->
               parent.removeClass("deleted")
               $("#form1").remove()
-              element.attr("src", e.target.result)
+              element.attr
+                src: e.target.result
+                id: "image_"+(new Date).getTime()
+              app.Image.add(element)
               return
             reader.readAsDataURL file
             return
@@ -463,7 +466,6 @@ define [
                   return false
                 return
             keyupCallback: (e) ->
-              key = e.which
               if e.keyCode is 8 and Redactor::lastSectionRemove
                 Redactor::lastSectionRemove = false
                 return false
