@@ -65,11 +65,12 @@ define [
         return
       link: ->
         @selection.restore();
+        $("#viewDoc").find("a").removeClass("selected")
         Redactor::lastLinkActive = "link_insert_"+(new Date).getTime();
         if @selection.getHtml().indexOf("<a id") isnt -1
           @insert.html(@selection.getText(), false)
         else
-          @insert.html('<a id="'+Redactor::lastLinkActive+'" href="">'+@selection.getText()+'</a>', false)
+          @insert.html('<a id="'+Redactor::lastLinkActive+'" href="" class="selected">'+@selection.getText()+'</a>', false)
         @code.sync()
         @observe.load()
         Redactor::findLink(Redactor::redactor)
@@ -498,10 +499,16 @@ define [
             Redactor::lastSection = $(@)
             $("#link-toolbar").removeClass("active").find("#link_value").val("")
             elem = $(event.target)
+            $("#viewDoc").find("a").each ->
+              $(@).removeClass("selected")
+              if !$(@).attr("href").trim().length
+                $(@).replaceWith($(@).text())
+              return
             if elem[0].tagName.toLowerCase() == "a"
               offset = elem.offset()
               Redactor::lastLinkActive = elem.attr("id")
               $("#link_value").val(elem.attr("href"))
+              elem.addClass "selected"
               offset.top = parseInt(offset.top) - 57
               offset.left = parseInt(offset.left) - 120 + elem.width()/2
               Redactor::linkShow(offset)

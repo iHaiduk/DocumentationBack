@@ -11,53 +11,55 @@ HomeController = (function() {
 
   HomeController.prototype.home = null;
 
-  HomeController.prototype.run = function(req, res) {
-    var v;
-    v = new View(res, 'index');
+  HomeController.prototype.defaultPage = 1;
 
-    /*page = new Page(
-      page_id: 1
-      code: """<div class="section">
-                    <div class="sub-section">
-                        <p>
-                            <sup>Getting Started Sub</sup>
-                        </p>
-                        <p>
-                            <sub>Getting Started Sub</sub>
-                        </p>
-                        <p>
-                            Less is a CSS pre-processor, meaning that it extends the CSS language, adding features that allow variables, mixins, functions and many other techniques that allow you to make CSS that is more maintainable, themable and extendable.
-                        </p>
-                        <p>
-                            Less runs inside Node, in the browser and inside Rhino. There are also many 3rd party tools that allow you to compile your files and watch for changes.
-                        </p>
-                        <p>
-                            For example:
-                        </p>
-                    </div>
-                </div>"""
-    );
-    page.save()
-     */
-    Page.findOne({
-      page_id: 1
+  HomeController.prototype.run = function(req, res) {
+    var defaultPage, v;
+    v = new View(res, 'index');
+    defaultPage = HomeController.prototype.defaultPage;
+    return Page.findOne({
+      page_id: defaultPage
     }).exec(function(err, pages) {
-      return v.render({
-        html: JSON.parse(pages.code)
-      });
+      var baseText, page;
+      if (pages == null) {
+        baseText = [
+          {
+            param: "text",
+            code: "<p><sup>Hello to Documentation page!</sup></p><p>This is your first page.</p>"
+          }
+        ];
+        page = new Page({
+          page_id: defaultPage,
+          code: [
+            {
+              param: "text",
+              code: JSON.stringify(baseText)
+            }
+          ]
+        });
+        return page.save(function(err) {
+          v.render({
+            html: baseText
+          });
+        });
+      } else {
+        v.render({
+          html: JSON.parse(pages.code)
+        });
+      }
     });
   };
 
   HomeController.prototype.save = function(req, res) {
-    var v;
+    var defaultPage, v;
     if ((req.body != null) && (req.body.code != null)) {
       v = new View(res);
+      defaultPage = HomeController.prototype.defaultPage;
       Page.findOne({
-        page_id: 1
+        page_id: defaultPage
       }, function(err, page) {
         page.code = req.body.code;
         page.save(function(err) {
-          console.log(result);
           v.send({
             answ: true
           });

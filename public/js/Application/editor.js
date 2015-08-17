@@ -57,11 +57,12 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
         },
         link: function() {
           this.selection.restore();
+          $("#viewDoc").find("a").removeClass("selected");
           Redactor.prototype.lastLinkActive = "link_insert_" + (new Date).getTime();
           if (this.selection.getHtml().indexOf("<a id") !== -1) {
             this.insert.html(this.selection.getText(), false);
           } else {
-            this.insert.html('<a id="' + Redactor.prototype.lastLinkActive + '" href="">' + this.selection.getText() + '</a>', false);
+            this.insert.html('<a id="' + Redactor.prototype.lastLinkActive + '" href="" class="selected">' + this.selection.getText() + '</a>', false);
           }
           this.code.sync();
           this.observe.load();
@@ -547,10 +548,17 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
             Redactor.prototype.lastSection = $(this);
             $("#link-toolbar").removeClass("active").find("#link_value").val("");
             elem = $(event.target);
+            $("#viewDoc").find("a").each(function() {
+              $(this).removeClass("selected");
+              if (!$(this).attr("href").trim().length) {
+                $(this).replaceWith($(this).text());
+              }
+            });
             if (elem[0].tagName.toLowerCase() === "a") {
               offset = elem.offset();
               Redactor.prototype.lastLinkActive = elem.attr("id");
               $("#link_value").val(elem.attr("href"));
+              elem.addClass("selected");
               offset.top = parseInt(offset.top) - 57;
               offset.left = parseInt(offset.left) - 120 + elem.width() / 2;
               Redactor.prototype.linkShow(offset);
