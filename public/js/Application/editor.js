@@ -2,7 +2,7 @@
 /**
  * Created by Igor on 02.08.2015.
  */
-define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/image', 'Application/video', 'codemirror/mode/htmlmixed/htmlmixed', 'codemirror/mode/clike/clike', 'codemirror/mode/coffeescript/coffeescript', 'codemirror/mode/css/css', 'codemirror/mode/javascript/javascript', 'codemirror/mode/php/php', 'codemirror/mode/sass/sass', 'codemirror/mode/sql/sql', 'codemirror/mode/xml/xml'], function($, CodeMirror) {
+define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/image', 'Application/video', 'codemirror/mode/htmlmixed/htmlmixed', 'codemirror/mode/clike/clike', 'codemirror/mode/coffeescript/coffeescript', 'codemirror/mode/css/css', 'codemirror/mode/javascript/javascript', 'codemirror/mode/php/php', 'codemirror/mode/sass/sass', 'codemirror/mode/sql/sql'], function($, CodeMirror) {
   var _docum;
   _docum = $(document);
   _docum.ready(function() {
@@ -120,9 +120,10 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
 
       CodeSave.prototype.add = function() {
         return _docum.find(".section").each(function() {
-          var code, param_id, sub, type;
+          var code, data, param_id, sub, type;
           type = $(this).data().type;
           sub = $(this).find(".sub-section");
+          data = {};
           switch (type) {
             case "image":
               if (!sub.hasClass("deleted")) {
@@ -138,6 +139,10 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
             case "code":
               param_id = $(this).find(".code").attr("id").replace("#", "");
               code = Redactor.prototype.CodeMirror[param_id].getValue();
+              data = {
+                type: Redactor.prototype.CodeMirror[param_id].getMode().name,
+                id: param_id
+              };
               break;
             default:
               type = "text";
@@ -146,7 +151,8 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
           if (code != null) {
             return CodeSave.prototype.code.push({
               param: type,
-              code: code
+              code: code,
+              data: data
             });
           }
         });
@@ -162,9 +168,7 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
             code: JSON.stringify(CodeSave.prototype.code)
           },
           dataType: "json",
-          success: function(res) {
-            return console.log(res);
-          }
+          success: function(res) {}
         });
       };
 
@@ -198,7 +202,7 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
         Redactor.prototype.template = {
           empty: "<div class=\"section\" data-type=\"text\">\n    <div class=\"sub-section\"></div>\n</div>",
           image: "<form id=\"form1\" runat=\"server\">\n<label for='imgInp' id='uploadImage'></label>\n    <input type='file' id=\"imgInp\" />\n</form>\n    <img src=\"\" class=\"image\" />",
-          code: "<textarea class='code'></textarea><ul class=\"language-list\" >\n<li class=\"language\" data-type=\"htmlmixed\">HTML</li>\n<li class=\"language\" data-type=\"CSS\">CSS</li>\n<li class=\"language\" data-type=\"SASS\">SASS</li>\n<li class=\"language\" data-type=\"JavaScript\">JavaScript</li>\n<li class=\"language\" data-type=\"coffeescript\">CoffeeScript</li>\n<li class=\"language\" data-type=\"PHP\">PHP</li>\n<li class=\"language\" data-type=\"SQL\">SQL</li>\n</ul>",
+          code: "<textarea class='code' data-mode='htmlmixed'></textarea><ul class=\"language-list\" >\n<li class=\"language active\" data-type=\"htmlmixed\">HTML</li>\n<li class=\"language\" data-type=\"CSS\">CSS</li>\n<li class=\"language\" data-type=\"SASS\">SASS</li>\n<li class=\"language\" data-type=\"JavaScript\">JavaScript</li>\n<li class=\"language\" data-type=\"coffeescript\">CoffeeScript</li>\n<li class=\"language\" data-type=\"PHP\">PHP</li>\n<li class=\"language\" data-type=\"text/x-mysql\">SQL</li>\n</ul>",
           video: "<input class='video' type='text' placeholder='Please insert youtube ID...' />",
           hr: "<hr/>"
         };
@@ -218,21 +222,23 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
             $("body").removeClass("editing");
             Redactor.prototype.save();
             app.Image.save();
-            app.codeSave.send();
+            setTimeout(function() {
+              return app.codeSave.send();
+            }, 10);
           }
         });
         Redactor.prototype.document.find(".code").each(function() {
-          CodeMirror.fromTextArea(this, {
-            mode: $(this).data().type,
+          Redactor.prototype.CodeMirror[$(this).attr("id")] = CodeMirror.fromTextArea(this, {
+            mode: $(this).data().mode,
             lineNumbers: true,
             matchBrackets: true,
             styleActiveLine: true,
             htmlMode: true,
-            readOnly: true,
             theme: "3024-day"
           });
         });
         Redactor.prototype.addListen();
+        Redactor.prototype.changeTypeListen();
       };
 
       Redactor.prototype.reset = function() {
@@ -317,7 +323,7 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
             $(element[0]).attr("id", param_id);
             $(element[1]).attr("data-id", param_id);
             Redactor.prototype.CodeMirror[param_id] = CodeMirror.fromTextArea(element[0], {
-              mode: "sass",
+              mode: "htmlmixed",
               lineNumbers: true,
               matchBrackets: true,
               styleActiveLine: true,
@@ -651,12 +657,15 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
 
       Redactor.prototype.changeTypeListen = function() {
         _docum.find(".language-list").find(".language").off("click").on("click", function() {
+          $(this).parents(".language-list").find(".language").removeClass("active");
+          $(this).addClass("active");
           Redactor.prototype.changeTypeCode($(this).parent().data().id, $(this).data().type);
         });
       };
 
       Redactor.prototype.changeTypeCode = function(id, type) {
         Redactor.prototype.CodeMirror[id].setOption("mode", type.toLowerCase());
+        _docum.find("#" + id).attr("data-mode", type.toLowerCase());
       };
 
       Redactor.prototype.isEmpty = function(_redactor, element) {

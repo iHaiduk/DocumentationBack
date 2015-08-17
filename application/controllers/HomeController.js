@@ -43,6 +43,7 @@ HomeController = (function() {
           });
         });
       } else {
+        console.log(JSON.parse(pages.code));
         v.render({
           html: JSON.parse(pages.code)
         });

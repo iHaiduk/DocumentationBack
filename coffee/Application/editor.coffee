@@ -17,7 +17,6 @@ define [
   'codemirror/mode/php/php'
   'codemirror/mode/sass/sass'
   'codemirror/mode/sql/sql'
-  'codemirror/mode/xml/xml'
 ], ($, CodeMirror) ->
   _docum = $(document)
   _docum.ready ->
@@ -124,6 +123,7 @@ define [
         _docum.find(".section").each ->
           type = $(@).data().type
           sub = $(@).find(".sub-section")
+          data = {}
           switch type
             when "image"
               if !sub.hasClass("deleted")
@@ -135,6 +135,9 @@ define [
             when "code"
               param_id = $(@).find(".code").attr("id").replace("#","")
               code = Redactor::CodeMirror[param_id].getValue()
+              data =
+                type: Redactor::CodeMirror[param_id].getMode().name
+                id: param_id
             else
               type = "text"
               code = sub.html()
@@ -142,18 +145,20 @@ define [
             CodeSave::code.push(
               param: type
               code: code
+              data: data
             )
 
       CodeSave::send = ->
         CodeSave::clean()
         CodeSave::add()
+        #console.log CodeSave::code
         $.ajax(
           url: "/save"
           type: "post"
           data: { code: JSON.stringify(CodeSave::code) }
           dataType: "json"
           success: (res)->
-            console.log(res)
+            #console.log(res)
         )
 
     class Redactor
@@ -186,14 +191,14 @@ define [
     <input type='file' id="imgInp" />
 </form>
     <img src="" class="image" />"""
-          code: """<textarea class='code'></textarea><ul class="language-list" >
-          <li class="language" data-type="htmlmixed">HTML</li>
+          code: """<textarea class='code' data-mode='htmlmixed'></textarea><ul class="language-list" >
+          <li class="language active" data-type="htmlmixed">HTML</li>
           <li class="language" data-type="CSS">CSS</li>
           <li class="language" data-type="SASS">SASS</li>
           <li class="language" data-type="JavaScript">JavaScript</li>
           <li class="language" data-type="coffeescript">CoffeeScript</li>
           <li class="language" data-type="PHP">PHP</li>
-          <li class="language" data-type="SQL">SQL</li>
+          <li class="language" data-type="text/x-mysql">SQL</li>
 </ul>"""
           video: """<input class='video' type='text' placeholder='Please insert youtube ID...' />"""
           hr: """<hr/>"""
@@ -213,22 +218,24 @@ define [
             $("body").removeClass "editing"
             Redactor::save()
             app.Image.save()
-            app.codeSave.send()
+            setTimeout ->
+              app.codeSave.send()
+            ,10
           return
 
         Redactor::document.find(".code").each ->
 
-          CodeMirror.fromTextArea @,
-            mode: $(@).data().type
+          Redactor::CodeMirror[$(@).attr("id")] = CodeMirror.fromTextArea @,
+            mode: $(@).data().mode
             lineNumbers: true
             matchBrackets: true
             styleActiveLine: true
             htmlMode: true
-            readOnly: true
             theme: "3024-day"
           return
 
         Redactor::addListen()
+        Redactor::changeTypeListen()
         return
 
       Redactor::reset = ()->
@@ -313,7 +320,7 @@ define [
             $(element[0]).attr("id", param_id)
             $(element[1]).attr("data-id", param_id)
             Redactor::CodeMirror[param_id] = CodeMirror.fromTextArea element[0],
-              mode: "sass"
+              mode: "htmlmixed"
               lineNumbers: true
               matchBrackets: true
               styleActiveLine: true
@@ -593,12 +600,15 @@ define [
 
       Redactor::changeTypeListen = ->
         _docum.find(".language-list").find(".language").off("click").on "click", ->
+          $(@).parents(".language-list").find(".language").removeClass("active")
+          $(@).addClass("active")
           Redactor::changeTypeCode($(@).parent().data().id, $(@).data().type)
           return
         return
 
       Redactor::changeTypeCode = (id, type)->
         Redactor::CodeMirror[id].setOption("mode", type.toLowerCase())
+        _docum.find("#"+id).attr("data-mode", type.toLowerCase())
         return
 
       Redactor::isEmpty = (_redactor, element = false)->
