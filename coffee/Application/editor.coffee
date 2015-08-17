@@ -110,15 +110,33 @@ define [
         CodeSave::code = []
         return
 
-      CodeSave::add = (code, parametr = "text")->
-        CodeSave::code = {
-          param: parametr
-          code: """<div class="section">
-                            <div class="sub-section">"""+code+"""</div>
-                        </div>"""
-        }
+      CodeSave::add = ()->
+        _docum.find(".section").each ->
+          type = $(@).data().type
+          sub = $(@).find(".sub-section")
+          switch type
+            when "image"
+              if !sub.hasClass("deleted")
+                code = sub.find(".image").attr("src")
+            when "video"
+              code = sub.find(".videoView").data().youtube-id
+            when "hr"
+              code = Redactor::template.hr
+            when "code"
+              param_id = $(@).find(".code").attr("id").replace("#","")
+              code = Redactor::CodeMirror[param_id].getValue()
+            else
+              type = "text"
+              code = sub.html()
+          if code?
+            CodeSave::code.push(
+              param: type
+              code: code
+            )
 
       CodeSave::send = ->
+        CodeSave::clean()
+        CodeSave::add()
         $.ajax(
           url: "/save"
           type: "post"
@@ -141,6 +159,7 @@ define [
         Redactor::lastSection = null
         Redactor::lastLinkActive = null
         Redactor::editLinkActive = false
+        Redactor::lastSectionRemove = null
         Redactor::position =
           start:
             x: 0
@@ -149,14 +168,14 @@ define [
             x: 0
             y: 0
         Redactor::template =
-          empty: """<div class="section">
+          empty: """<div class="section" data-type="text">
                             <div class="sub-section"></div>
                         </div>"""
           image: """<form id="form1" runat="server">
 <label for='imgInp' id='uploadImage'></label>
     <input type='file' id="imgInp" />
 </form>
-    <img src="" />"""
+    <img src="" class="image" />"""
           code: """<textarea class='code'></textarea><ul class="language-list" >
           <li class="language" data-type="htmlmixed">HTML</li>
           <li class="language" data-type="CSS">CSS</li>
@@ -180,7 +199,6 @@ define [
             Redactor::showPlusButton()
             app.Image.edit()
           else
-            app.codeSave.clean()
             $(@).removeClass("btn-save").addClass "btn-edit"
             $("body").removeClass "editing"
             Redactor::save()
@@ -231,9 +249,10 @@ define [
           return
 
         Redactor::document.find('.icon-image').off('click').on 'click', ->
-          Redactor::mediaButton Redactor::template.image, (element)->
-            Redactor::preUploadImage(element)
+          Redactor::mediaButton "image", Redactor::template.image, (element)->
+            $("#imgInp").parents(".noRedactor").addClass("deleted")
             $("#media-toolbar").removeClass("active")
+            Redactor::preUploadImage(element)
             $("#uploadImage").click()
             return
           return
@@ -241,12 +260,14 @@ define [
         Redactor::preUploadImage = (element) ->
           $("#imgInp").on "change", (e)->
             element = $(element[2])
+            parent = element.parents(".noRedactor")
             file = e.target.files[0]
             imageType = /image.*/
             if !file.type.match(imageType)
               return
             reader = new FileReader
             reader.onload = (e)->
+              parent.removeClass("deleted")
               $("#form1").remove()
               element.attr("src", e.target.result)
               return
@@ -254,8 +275,17 @@ define [
             return
           return
 
+        Redactor::getBase64Image = (imgElem)->
+          canvas = document.createElement('canvas')
+          canvas.width = imgElem.clientWidth
+          canvas.height = imgElem.clientHeight
+          ctx = canvas.getContext('2d')
+          ctx.drawImage imgElem, 0, 0
+          dataURL = canvas.toDataURL('image/png')
+          dataURL.replace /^data:image\/(png|jpg);base64,/, ''
+
         Redactor::document.find('.icon-video').off('click').on 'click', ->
-          Redactor::mediaButton Redactor::template.video, (element)->
+          Redactor::mediaButton "video", Redactor::template.video, (element)->
             element.focus().on "blur keyup", (e)->
               if (e.type is "blur" or (e.type is "keyup" and e.which is 13)) and $(@).val().length > 5
                 parent = $(@).parent()
@@ -268,7 +298,7 @@ define [
           return
 
         Redactor::document.find('.icon-code').off('click').on 'click', ->
-          Redactor::mediaButton Redactor::template.code, (element)->
+          Redactor::mediaButton "code", Redactor::template.code, (element)->
             param_id = "redactor_"+(new Date).getTime()
             $(element[0]).attr("id", param_id)
             $(element[1]).attr("data-id", param_id)
@@ -283,8 +313,8 @@ define [
             return
           return
 
-        Redactor::document.find('.icon-hr').off('click').on 'click', ->
-          Redactor::mediaButton Redactor::template.hr
+        $("#media-toolbar").find('.icon-hr').off('click').on 'click', ->
+          Redactor::mediaButton "hr", Redactor::template.hr
           return
 
         Redactor::document.find('.remove').off('click').on 'click', ->
@@ -295,7 +325,7 @@ define [
           return
         return
 
-      Redactor::mediaButton = (code, call)->
+      Redactor::mediaButton = (type, code, call)->
         frstSectionArray = []
         lastSectionArray = []
         parentSection = if Redactor::lastSection.hasClass("sub-section") then Redactor::lastSection else Redactor::lastSection.parents(".sub-section")
@@ -317,9 +347,9 @@ define [
         frstSectionArrayHTML = frstSectionArray.join("")
         lastSectionArrayHTML = lastSectionArray.join("")
 
-        parentSection.html(frstSectionArrayHTML)
+        parentSection.redactor("code.set",frstSectionArrayHTML)
         element = $(code)
-        noRedactorSection = $("<div class='section'><div class='sub-section noRedactor'></div><span class='btn btn-toggle remove'></span></div></div>")
+        noRedactorSection = $("<div class='section' data-type='"+type+"'><div class='sub-section noRedactor'></div><span class='btn btn-toggle remove'></span></div></div>")
         noRedactorSection.find(".sub-section").html(element)
         parentSection.find(".empty").remove()
         parentSection.parents(".section").after(noRedactorSection)
@@ -402,18 +432,26 @@ define [
                 return
               , 10)
               return
-            keyupCallback: (e) ->
-              key = e.which
-              Redactor::lastSection = $(@selection.getBlock())
+            keydownCallback: (e) ->
               if (e.keyCode is 8) and $(@selection.getBlock()).hasClass("empty")
                 $(@selection.getBlock()).remove()
                 if !@$element.find("p:not(.empty)").length and ($("#viewDoc").find(".sub-section:not(.noRedactor)").length-1)
                   @$element.parents(".section").remove()
+                  _docum.find("#media-toolbar").removeClass("active")
+                  Redactor::lastSectionRemove = true
+                  return false
                 return
+            keyupCallback: (e) ->
+              key = e.which
+              if e.keyCode is 8 and Redactor::lastSectionRemove
+                Redactor::lastSectionRemove = false
+                return false
+
+              Redactor::lastSection = $(@selection.getBlock())
               if (e.keyCode is 13)
                 @selection.restore()
                 aselect = $(@selection.getBlock()).parent()
-                if $(@selection.getBlock()).text().trim() is ""
+                if $(@selection.getBlock()).text() is ""
                   aselect.toggleClass("empty", true)
                   $(@selection.getBlock()).html("<br/>")
                 @code.sync()
@@ -469,6 +507,7 @@ define [
               Redactor::linkShow(offset)
 
             selection = if not window.getSelection? then window.getSelection() else document.getSelection()
+            # TODO return selection http://stackoverflow.com/questions/1181700/set-cursor-position-on-contenteditable-div/3323835#3323835
             if selection.type is 'Range'
               toolbar = $(@).prev()
               Redactor::toolbar = toolbar
@@ -516,7 +555,6 @@ define [
               Redactor::removeRedactor $(@)
               return
             else
-              app.codeSave.add($.trim($(@).redactor('code.get')), "text")
               $(@).redactor("core.destroy")
               return
         setTimeout(->
@@ -554,7 +592,7 @@ define [
           block = if $(_redactor.selection.getCurrent())[0]? then $(_redactor.selection.getCurrent()) else $(_redactor.selection.getBlock())
           html = $(_redactor.selection.getBlock()).html()
 
-        text = block.text().trim()
+        text = block.text()
         html = html.html().replace(/[\u200B]/g, '').trim() if typeof html is "object" and html.html()?
         lnght = text.length
 

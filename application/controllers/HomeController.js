@@ -43,24 +43,20 @@ HomeController = (function() {
       page_id: 1
     }).exec(function(err, pages) {
       return v.render({
-        html: pages.code
+        html: JSON.parse(pages.code)
       });
     });
   };
 
   HomeController.prototype.save = function(req, res) {
-    var code, post;
-    code = void 0;
-    if (req.body !== null) {
-      post = JSON.parse(req.body.code);
+    var v;
+    if ((req.body != null) && (req.body.code != null)) {
+      v = new View(res);
       Page.findOne({
         page_id: 1
       }, function(err, page) {
-        page.code = post.code;
+        page.code = req.body.code;
         page.save(function(err) {
-          var v;
-          v = void 0;
-          v = new View(res);
           console.log(result);
           v.send({
             answ: true

@@ -32,21 +32,17 @@ class HomeController
     page.save()###
 
     Page.findOne({page_id: 1}).exec (err, pages)->
-
       v.render(
-        html: pages.code
+        html: JSON.parse pages.code
       )
     return
 
   save: (req, res) ->
-    code = undefined
-    if req.body != null
-      post = JSON.parse(req.body.code)
+    if req.body? and req.body.code?
+      v = new View(res)
       Page.findOne { page_id: 1 }, (err, page) ->
-        page.code = post.code
+        page.code = req.body.code
         page.save (err) ->
-          v = undefined
-          v = new View(res)
           console.log result
           v.send answ: true
           return

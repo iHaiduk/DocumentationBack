@@ -37,7 +37,17 @@
     <div class="right-side">
         <div class="view" id="viewDoc">
             <div class="section-wrap" >
-                <%-html%>
+                <% for(var i=0; i<html.length; i++) {%>
+                <div class="section">
+                    <div class="sub-section <%if(html[i].param!="text"){%><%= "noRedactor" %><%} %>">
+                        <%if(html[i].param=="image"){%>
+                            <img src="<%- html[i].code %>" class="image" />
+                        <%}else{ %>
+                        <%- html[i].code %>
+                        <%} %>
+                    </div>
+                </div>
+                <% } %>
             </div>
             <div class="media-toolbar" id="media-toolbar">
                 <span class="btn btn-toggle icon-plus"></span>
