@@ -22,9 +22,9 @@ html, body { height: 100%; }
 
 body { padding-top: 104px; margin: 0; font-family: "Verdana"; background: $white; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; overflow-x: hidden;
 
-    ::-moz-selection { background: #3297FD; padding-top: 5px; color: #fff; }
+    ::-moz-selection { background: #3297FD; color: #fff; }
 
-    ::selection { background: #3297FD; padding-top: 5px; color: #fff; }
+    ::selection { background: #3297FD; color: #fff; }
 
     @include custom_breakpoint(800) { overflow-x: auto; }
 

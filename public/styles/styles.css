@@ -28,11 +28,9 @@ body {
   overflow-x: hidden; }
   body ::-moz-selection {
     background: #3297FD;
-    padding-top: 5px;
     color: #fff; }
   body ::selection {
     background: #3297FD;
-    padding-top: 5px;
     color: #fff; }
   @media (max-width: 800px) {
     body {
