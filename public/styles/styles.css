@@ -26,6 +26,14 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden; }
+  body ::-moz-selection {
+    background: #3297FD;
+    padding-top: 5px;
+    color: #fff; }
+  body ::selection {
+    background: #3297FD;
+    padding-top: 5px;
+    color: #fff; }
   @media (max-width: 800px) {
     body {
       overflow-x: auto; } }
@@ -183,7 +191,7 @@ img {
     background-image: url("../img/empty.svg"); }
   .btn.remove {
     position: absolute;
-    top: 0;
+    top: -3px;
     left: -55px;
     width: 30px;
     height: 30px;
@@ -445,7 +453,7 @@ body:not(.editing) .CodeMirror-cursors {
         line-height: 24px;
         border-left: 3px solid rgba(0, 0, 0, 0.8); }
       .view .section-wrap .section .sub-section .CodeMirror {
-        margin: 30px 0; }
+        margin: 50px 0 20px; }
       .view .section-wrap .section .sub-section .language-list {
         position: absolute;
         top: -30px;
