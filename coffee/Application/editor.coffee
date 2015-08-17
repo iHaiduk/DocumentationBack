@@ -42,20 +42,28 @@ define [
         @button.addCallback button4, @insertHead.link
         return
       insertH1: (key)->
-        @inline.format('sup')
         @selection.restore()
+        _block = $(@selection.getBlock())
+        _block = if _block[0].tagName.toLowerCase() != "p" then _block.parent() else _block
+        _html = $(@selection.getBlock()).html()
+        if _html.indexOf("<sup") is -1
+          $(@selection.getBlock()).html("<sup>"+$(@selection.getBlock()).text()+"<sup>")
+        else
+          $(@selection.getBlock()).html($(@selection.getBlock()).text())
         @code.sync()
         @observe.load()
-        @inline.format('sub') if @.selection.getParent() and $(@.selection.getParent())[0].tagName.toLowerCase() =='sub'
-        @inline.format('blockquote') if @.selection.getParent() and $(@.selection.getParent())[0].tagName.toLowerCase() =='blockquote'
         return
       insertH2: (key)->
-        @inline.format('sub')
         @selection.restore()
+        _block = $(@selection.getBlock())
+        _block = if _block[0].tagName.toLowerCase() != "p" then _block.parent() else _block
+        _html = $(@selection.getBlock()).html()
+        if _html.indexOf("<sub") is -1
+          $(@selection.getBlock()).html("<sub>"+$(@selection.getBlock()).text()+"<sub>")
+        else
+          $(@selection.getBlock()).html($(@selection.getBlock()).text())
         @code.sync()
         @observe.load()
-        @inline.format('sup') if @.selection.getParent() and $(@.selection.getParent())[0].tagName.toLowerCase() =='sup'
-        @inline.format('blockquote') if @.selection.getParent() and $(@.selection.getParent())[0].tagName.toLowerCase() =='blockquote'
         return
       center: ->
         @selection.restore();
@@ -77,15 +85,16 @@ define [
         $("#link_value").focus()
         return
       blockquote: ->
-        @inline.format('blockquote')
         @selection.restore()
-        @code.sync()
-        @observe.load()
+        @inline.format('blockquote')
         @inline.format('sup') if @.selection.getParent() and $(@.selection.getParent())[0].tagName.toLowerCase() =='sup'
         @inline.format('sub') if @.selection.getParent() and $(@.selection.getParent())[0].tagName.toLowerCase() =='sub'
+        @code.sync()
+        @observe.load()
         return
       clear: ->
         @selection.restore();
+        $(@selection.getBlock()).html($(@selection.getBlock()).text())
         @insert.html(@selection.getText(), false)
         @code.sync()
         @observe.load()

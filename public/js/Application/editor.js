@@ -26,28 +26,32 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
           this.button.addCallback(button4, this.insertHead.link);
         },
         insertH1: function(key) {
-          this.inline.format('sup');
+          var _block, _html;
           this.selection.restore();
+          _block = $(this.selection.getBlock());
+          _block = _block[0].tagName.toLowerCase() !== "p" ? _block.parent() : _block;
+          _html = $(this.selection.getBlock()).html();
+          if (_html.indexOf("<sup") === -1) {
+            $(this.selection.getBlock()).html("<sup>" + $(this.selection.getBlock()).text() + "<sup>");
+          } else {
+            $(this.selection.getBlock()).html($(this.selection.getBlock()).text());
+          }
           this.code.sync();
           this.observe.load();
-          if (this.selection.getParent() && $(this.selection.getParent())[0].tagName.toLowerCase() === 'sub') {
-            this.inline.format('sub');
-          }
-          if (this.selection.getParent() && $(this.selection.getParent())[0].tagName.toLowerCase() === 'blockquote') {
-            this.inline.format('blockquote');
-          }
         },
         insertH2: function(key) {
-          this.inline.format('sub');
+          var _block, _html;
           this.selection.restore();
+          _block = $(this.selection.getBlock());
+          _block = _block[0].tagName.toLowerCase() !== "p" ? _block.parent() : _block;
+          _html = $(this.selection.getBlock()).html();
+          if (_html.indexOf("<sub") === -1) {
+            $(this.selection.getBlock()).html("<sub>" + $(this.selection.getBlock()).text() + "<sub>");
+          } else {
+            $(this.selection.getBlock()).html($(this.selection.getBlock()).text());
+          }
           this.code.sync();
           this.observe.load();
-          if (this.selection.getParent() && $(this.selection.getParent())[0].tagName.toLowerCase() === 'sup') {
-            this.inline.format('sup');
-          }
-          if (this.selection.getParent() && $(this.selection.getParent())[0].tagName.toLowerCase() === 'blockquote') {
-            this.inline.format('blockquote');
-          }
         },
         center: function() {
           this.selection.restore();
@@ -70,19 +74,20 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
           $("#link_value").focus();
         },
         blockquote: function() {
-          this.inline.format('blockquote');
           this.selection.restore();
-          this.code.sync();
-          this.observe.load();
+          this.inline.format('blockquote');
           if (this.selection.getParent() && $(this.selection.getParent())[0].tagName.toLowerCase() === 'sup') {
             this.inline.format('sup');
           }
           if (this.selection.getParent() && $(this.selection.getParent())[0].tagName.toLowerCase() === 'sub') {
             this.inline.format('sub');
           }
+          this.code.sync();
+          this.observe.load();
         },
         clear: function() {
           this.selection.restore();
+          $(this.selection.getBlock()).html($(this.selection.getBlock()).text());
           this.insert.html(this.selection.getText(), false);
           this.code.sync();
           this.observe.load();
