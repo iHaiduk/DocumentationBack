@@ -12,7 +12,9 @@ define(['jquery', 'taggd', 'video', 'Application/editor'], function($, taggd) {
       };
 
       Video.prototype.activate = function(element) {
-        element.lazyYT();
+        if (element.length) {
+          element.lazyYT();
+        }
       };
 
       return Video;

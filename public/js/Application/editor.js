@@ -119,8 +119,9 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
       };
 
       CodeSave.prototype.add = function() {
-        return _docum.find(".section").each(function() {
+        _docum.find(".section").each(function() {
           var code, data, param_id, sub, type;
+          console.log(this);
           type = $(this).data().type;
           sub = $(this).find(".sub-section");
           data = {};
@@ -131,7 +132,7 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
               }
               break;
             case "video":
-              code = sub.find(".videoView").data().youtube - id;
+              code = sub.find(".videoView").data().youtubeId;
               break;
             case "hr":
               code = Redactor.prototype.template.hr;
@@ -139,8 +140,9 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
             case "code":
               param_id = $(this).find(".code").attr("id").replace("#", "");
               code = Redactor.prototype.CodeMirror[param_id].getValue();
+              console.log(Redactor.prototype.CodeMirror[param_id].getMode().name);
               data = {
-                type: Redactor.prototype.CodeMirror[param_id].getMode().name,
+                type: Redactor.prototype.CodeMirror[param_id].getMode().name === "sql" ? "text/x-mysql" : Redactor.prototype.CodeMirror[param_id].getMode().name,
                 id: param_id
               };
               break;
@@ -239,6 +241,7 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
         });
         Redactor.prototype.addListen();
         Redactor.prototype.changeTypeListen();
+        app.Video.activate(parent.find(".videoView"));
       };
 
       Redactor.prototype.reset = function() {

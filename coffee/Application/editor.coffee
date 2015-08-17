@@ -121,6 +121,7 @@ define [
 
       CodeSave::add = ()->
         _docum.find(".section").each ->
+          console.log(@)
           type = $(@).data().type
           sub = $(@).find(".sub-section")
           data = {}
@@ -129,14 +130,15 @@ define [
               if !sub.hasClass("deleted")
                 code = sub.find(".image").attr("src")
             when "video"
-              code = sub.find(".videoView").data().youtube-id
+              code = sub.find(".videoView").data().youtubeId
             when "hr"
               code = Redactor::template.hr
             when "code"
               param_id = $(@).find(".code").attr("id").replace("#","")
               code = Redactor::CodeMirror[param_id].getValue()
+              console.log Redactor::CodeMirror[param_id].getMode().name
               data =
-                type: Redactor::CodeMirror[param_id].getMode().name
+                type: if Redactor::CodeMirror[param_id].getMode().name is "sql" then "text/x-mysql" else Redactor::CodeMirror[param_id].getMode().name
                 id: param_id
             else
               type = "text"
@@ -147,6 +149,7 @@ define [
               code: code
               data: data
             )
+        return
 
       CodeSave::send = ->
         CodeSave::clean()
@@ -236,6 +239,7 @@ define [
 
         Redactor::addListen()
         Redactor::changeTypeListen()
+        app.Video.activate(parent.find(".videoView"))
         return
 
       Redactor::reset = ()->

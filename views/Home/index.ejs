@@ -61,6 +61,13 @@
                     </div>
                     <%if(html[i].param!="text"){%><span class="btn btn-toggle remove"></span><%} %>
                 </div>
+                <%if(i==(html.length-1) && html[i].param!="text"){%>
+                <div class="section" data-type="text">
+                    <div class="sub-section">
+                        <p></p>
+                    </div>
+                </div>
+                <% } %>
                 <% } %>
             </div>
             <div class="media-toolbar" id="media-toolbar">
