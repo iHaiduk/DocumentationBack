@@ -453,7 +453,7 @@ body:not(.editing) .CodeMirror-cursors {
         line-height: 24px;
         border-left: 3px solid rgba(0, 0, 0, 0.8); }
       .view .section-wrap .section .sub-section .CodeMirror {
-        margin: 30px 0; }
+        margin: 50px 0 20px; }
       .view .section-wrap .section .sub-section .language-list {
         position: absolute;
         top: -30px;
