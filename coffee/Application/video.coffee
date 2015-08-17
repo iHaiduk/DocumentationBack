@@ -16,7 +16,7 @@ define [
         @
 
       Video::activate = (element)->
-        element.lazyYT()
+        element.lazyYT() if element.length
         return
 
 

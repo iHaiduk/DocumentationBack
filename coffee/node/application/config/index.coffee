@@ -1,6 +1,6 @@
 _Config =
 	url: "127.0.0.1"
-	port: 3000
+	port: 3001
 	mode: "local"
 	socket: true
 	publicFolder: "public"
@@ -13,5 +13,6 @@ _Config =
 			user: ""
 			password: ""
 			table: "siteBilder"
+
 
 module.exports = _Config

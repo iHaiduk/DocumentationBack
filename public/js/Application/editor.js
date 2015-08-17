@@ -2,7 +2,7 @@
 /**
  * Created by Igor on 02.08.2015.
  */
-define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/image', 'Application/video', 'codemirror/mode/htmlmixed/htmlmixed', 'codemirror/mode/clike/clike', 'codemirror/mode/coffeescript/coffeescript', 'codemirror/mode/css/css', 'codemirror/mode/javascript/javascript', 'codemirror/mode/php/php', 'codemirror/mode/sass/sass', 'codemirror/mode/sql/sql', 'codemirror/mode/xml/xml'], function($, CodeMirror) {
+define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/image', 'Application/video', 'codemirror/mode/htmlmixed/htmlmixed', 'codemirror/mode/clike/clike', 'codemirror/mode/coffeescript/coffeescript', 'codemirror/mode/css/css', 'codemirror/mode/javascript/javascript', 'codemirror/mode/php/php', 'codemirror/mode/sass/sass', 'codemirror/mode/sql/sql'], function($, CodeMirror) {
   var _docum;
   _docum = $(document);
   _docum.ready(function() {
@@ -26,28 +26,32 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
           this.button.addCallback(button4, this.insertHead.link);
         },
         insertH1: function(key) {
-          this.inline.format('sup');
+          var _block, _html;
           this.selection.restore();
+          _block = $(this.selection.getBlock());
+          _block = _block[0].tagName.toLowerCase() !== "p" ? _block.parent() : _block;
+          _html = $(this.selection.getBlock()).html();
+          if (_html.indexOf("<sup") === -1) {
+            $(this.selection.getBlock()).html("<sup>" + $(this.selection.getBlock()).text() + "<sup>");
+          } else {
+            $(this.selection.getBlock()).html($(this.selection.getBlock()).text());
+          }
           this.code.sync();
           this.observe.load();
-          if (this.selection.getParent() && $(this.selection.getParent())[0].tagName.toLowerCase() === 'sub') {
-            this.inline.format('sub');
-          }
-          if (this.selection.getParent() && $(this.selection.getParent())[0].tagName.toLowerCase() === 'blockquote') {
-            this.inline.format('blockquote');
-          }
         },
         insertH2: function(key) {
-          this.inline.format('sub');
+          var _block, _html;
           this.selection.restore();
+          _block = $(this.selection.getBlock());
+          _block = _block[0].tagName.toLowerCase() !== "p" ? _block.parent() : _block;
+          _html = $(this.selection.getBlock()).html();
+          if (_html.indexOf("<sub") === -1) {
+            $(this.selection.getBlock()).html("<sub>" + $(this.selection.getBlock()).text() + "<sub>");
+          } else {
+            $(this.selection.getBlock()).html($(this.selection.getBlock()).text());
+          }
           this.code.sync();
           this.observe.load();
-          if (this.selection.getParent() && $(this.selection.getParent())[0].tagName.toLowerCase() === 'sup') {
-            this.inline.format('sup');
-          }
-          if (this.selection.getParent() && $(this.selection.getParent())[0].tagName.toLowerCase() === 'blockquote') {
-            this.inline.format('blockquote');
-          }
         },
         center: function() {
           this.selection.restore();
@@ -57,11 +61,12 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
         },
         link: function() {
           this.selection.restore();
+          $("#viewDoc").find("a").removeClass("selected");
           Redactor.prototype.lastLinkActive = "link_insert_" + (new Date).getTime();
           if (this.selection.getHtml().indexOf("<a id") !== -1) {
             this.insert.html(this.selection.getText(), false);
           } else {
-            this.insert.html('<a id="' + Redactor.prototype.lastLinkActive + '" href="">' + this.selection.getText() + '</a>', false);
+            this.insert.html('<a id="' + Redactor.prototype.lastLinkActive + '" href="" class="selected">' + this.selection.getText() + '</a>', false);
           }
           this.code.sync();
           this.observe.load();
@@ -69,19 +74,20 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
           $("#link_value").focus();
         },
         blockquote: function() {
-          this.inline.format('blockquote');
           this.selection.restore();
-          this.code.sync();
-          this.observe.load();
+          this.inline.format('blockquote');
           if (this.selection.getParent() && $(this.selection.getParent())[0].tagName.toLowerCase() === 'sup') {
             this.inline.format('sup');
           }
           if (this.selection.getParent() && $(this.selection.getParent())[0].tagName.toLowerCase() === 'sub') {
             this.inline.format('sub');
           }
+          this.code.sync();
+          this.observe.load();
         },
         clear: function() {
           this.selection.restore();
+          $(this.selection.getBlock()).html($(this.selection.getBlock()).text());
           this.insert.html(this.selection.getText(), false);
           this.code.sync();
           this.observe.load();
@@ -112,17 +118,51 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
         CodeSave.prototype.code = [];
       };
 
-      CodeSave.prototype.add = function(code, parametr) {
-        if (parametr == null) {
-          parametr = "text";
-        }
-        return CodeSave.prototype.code = {
-          param: parametr,
-          code: "<div class=\"section\">\n<div class=\"sub-section\">" + code + "</div>\n</div>"
-        };
+      CodeSave.prototype.add = function() {
+        _docum.find(".section").each(function() {
+          var code, data, param_id, sub, type;
+          console.log(this);
+          type = $(this).data().type;
+          sub = $(this).find(".sub-section");
+          data = {};
+          switch (type) {
+            case "image":
+              if (!sub.hasClass("deleted")) {
+                code = sub.find(".image").attr("src");
+              }
+              break;
+            case "video":
+              code = sub.find(".videoView").data().youtubeId;
+              break;
+            case "hr":
+              code = Redactor.prototype.template.hr;
+              break;
+            case "code":
+              param_id = $(this).find(".code").attr("id").replace("#", "");
+              code = Redactor.prototype.CodeMirror[param_id].getValue();
+              console.log(Redactor.prototype.CodeMirror[param_id].getMode().name);
+              data = {
+                type: Redactor.prototype.CodeMirror[param_id].getMode().name === "sql" ? "text/x-mysql" : Redactor.prototype.CodeMirror[param_id].getMode().name,
+                id: param_id
+              };
+              break;
+            default:
+              type = "text";
+              code = sub.html();
+          }
+          if (code != null) {
+            return CodeSave.prototype.code.push({
+              param: type,
+              code: code,
+              data: data
+            });
+          }
+        });
       };
 
       CodeSave.prototype.send = function() {
+        CodeSave.prototype.clean();
+        CodeSave.prototype.add();
         return $.ajax({
           url: "/save",
           type: "post",
@@ -130,9 +170,7 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
             code: JSON.stringify(CodeSave.prototype.code)
           },
           dataType: "json",
-          success: function(res) {
-            return console.log(res);
-          }
+          success: function(res) {}
         });
       };
 
@@ -152,6 +190,7 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
         Redactor.prototype.lastSection = null;
         Redactor.prototype.lastLinkActive = null;
         Redactor.prototype.editLinkActive = false;
+        Redactor.prototype.lastSectionRemove = null;
         Redactor.prototype.position = {
           start: {
             x: 0,
@@ -163,9 +202,9 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
           }
         };
         Redactor.prototype.template = {
-          empty: "<div class=\"section\">\n    <div class=\"sub-section\"></div>\n</div>",
-          image: "<form id=\"form1\" runat=\"server\">\n<label for='imgInp' id='uploadImage'></label>\n    <input type='file' id=\"imgInp\" />\n</form>\n    <img src=\"\" />",
-          code: "<textarea class='code'></textarea><ul class=\"language-list\" >\n<li class=\"language\" data-type=\"htmlmixed\">HTML</li>\n<li class=\"language\" data-type=\"CSS\">CSS</li>\n<li class=\"language\" data-type=\"SASS\">SASS</li>\n<li class=\"language\" data-type=\"JavaScript\">JavaScript</li>\n<li class=\"language\" data-type=\"coffeescript\">CoffeeScript</li>\n<li class=\"language\" data-type=\"PHP\">PHP</li>\n<li class=\"language\" data-type=\"SQL\">SQL</li>\n</ul>",
+          empty: "<div class=\"section\" data-type=\"text\">\n    <div class=\"sub-section\"></div>\n</div>",
+          image: "<form id=\"form1\" runat=\"server\">\n<label for='imgInp' id='uploadImage'></label>\n    <input type='file' id=\"imgInp\" />\n</form>\n    <img src=\"\" class=\"image\" />",
+          code: "<textarea class='code' data-mode='htmlmixed'></textarea><ul class=\"language-list\" >\n<li class=\"language active\" data-type=\"htmlmixed\">HTML</li>\n<li class=\"language\" data-type=\"CSS\">CSS</li>\n<li class=\"language\" data-type=\"SASS\">SASS</li>\n<li class=\"language\" data-type=\"JavaScript\">JavaScript</li>\n<li class=\"language\" data-type=\"coffeescript\">CoffeeScript</li>\n<li class=\"language\" data-type=\"PHP\">PHP</li>\n<li class=\"language\" data-type=\"text/x-mysql\">SQL</li>\n</ul>",
           video: "<input class='video' type='text' placeholder='Please insert youtube ID...' />",
           hr: "<hr/>"
         };
@@ -181,26 +220,28 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
             Redactor.prototype.showPlusButton();
             app.Image.edit();
           } else {
-            app.codeSave.clean();
             $(this).removeClass("btn-save").addClass("btn-edit");
             $("body").removeClass("editing");
             Redactor.prototype.save();
             app.Image.save();
-            app.codeSave.send();
+            setTimeout(function() {
+              return app.codeSave.send();
+            }, 10);
           }
         });
         Redactor.prototype.document.find(".code").each(function() {
-          CodeMirror.fromTextArea(this, {
-            mode: $(this).data().type,
+          Redactor.prototype.CodeMirror[$(this).attr("id")] = CodeMirror.fromTextArea(this, {
+            mode: $(this).data().mode,
             lineNumbers: true,
             matchBrackets: true,
             styleActiveLine: true,
             htmlMode: true,
-            readOnly: true,
             theme: "3024-day"
           });
         });
         Redactor.prototype.addListen();
+        Redactor.prototype.changeTypeListen();
+        app.Video.activate(parent.find(".videoView"));
       };
 
       Redactor.prototype.reset = function() {
@@ -228,16 +269,18 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
           $(this).toggleClass('open');
         });
         Redactor.prototype.document.find('.icon-image').off('click').on('click', function() {
-          Redactor.prototype.mediaButton(Redactor.prototype.template.image, function(element) {
-            Redactor.prototype.preUploadImage(element);
+          Redactor.prototype.mediaButton("image", Redactor.prototype.template.image, function(element) {
+            $("#imgInp").parents(".noRedactor").addClass("deleted");
             $("#media-toolbar").removeClass("active");
+            Redactor.prototype.preUploadImage(element);
             $("#uploadImage").click();
           });
         });
         Redactor.prototype.preUploadImage = function(element) {
           $("#imgInp").on("change", function(e) {
-            var file, imageType, reader;
+            var file, imageType, parent, reader;
             element = $(element[2]);
+            parent = element.parents(".noRedactor");
             file = e.target.files[0];
             imageType = /image.*/;
             if (!file.type.match(imageType)) {
@@ -245,14 +288,25 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
             }
             reader = new FileReader;
             reader.onload = function(e) {
+              parent.removeClass("deleted");
               $("#form1").remove();
               element.attr("src", e.target.result);
             };
             reader.readAsDataURL(file);
           });
         };
+        Redactor.prototype.getBase64Image = function(imgElem) {
+          var canvas, ctx, dataURL;
+          canvas = document.createElement('canvas');
+          canvas.width = imgElem.clientWidth;
+          canvas.height = imgElem.clientHeight;
+          ctx = canvas.getContext('2d');
+          ctx.drawImage(imgElem, 0, 0);
+          dataURL = canvas.toDataURL('image/png');
+          return dataURL.replace(/^data:image\/(png|jpg);base64,/, '');
+        };
         Redactor.prototype.document.find('.icon-video').off('click').on('click', function() {
-          Redactor.prototype.mediaButton(Redactor.prototype.template.video, function(element) {
+          Redactor.prototype.mediaButton("video", Redactor.prototype.template.video, function(element) {
             element.focus().on("blur keyup", function(e) {
               var parent;
               if ((e.type === "blur" || (e.type === "keyup" && e.which === 13)) && $(this).val().length > 5) {
@@ -266,13 +320,13 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
           });
         });
         Redactor.prototype.document.find('.icon-code').off('click').on('click', function() {
-          Redactor.prototype.mediaButton(Redactor.prototype.template.code, function(element) {
+          Redactor.prototype.mediaButton("code", Redactor.prototype.template.code, function(element) {
             var param_id;
             param_id = "redactor_" + (new Date).getTime();
             $(element[0]).attr("id", param_id);
             $(element[1]).attr("data-id", param_id);
             Redactor.prototype.CodeMirror[param_id] = CodeMirror.fromTextArea(element[0], {
-              mode: "sass",
+              mode: "htmlmixed",
               lineNumbers: true,
               matchBrackets: true,
               styleActiveLine: true,
@@ -282,8 +336,8 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
             Redactor.prototype.changeTypeListen();
           });
         });
-        Redactor.prototype.document.find('.icon-hr').off('click').on('click', function() {
-          Redactor.prototype.mediaButton(Redactor.prototype.template.hr);
+        $("#media-toolbar").find('.icon-hr').off('click').on('click', function() {
+          Redactor.prototype.mediaButton("hr", Redactor.prototype.template.hr);
         });
         Redactor.prototype.document.find('.remove').off('click').on('click', function() {
           var _this;
@@ -294,7 +348,7 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
         });
       };
 
-      Redactor.prototype.mediaButton = function(code, call) {
+      Redactor.prototype.mediaButton = function(type, code, call) {
         var element, frstSectionArray, frstSectionArrayHTML, lastSectionArray, lastSectionArrayHTML, noRedactorSection, parentSection, pos;
         frstSectionArray = [];
         lastSectionArray = [];
@@ -318,9 +372,9 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
         });
         frstSectionArrayHTML = frstSectionArray.join("");
         lastSectionArrayHTML = lastSectionArray.join("");
-        parentSection.html(frstSectionArrayHTML);
+        parentSection.redactor("code.set", frstSectionArrayHTML);
         element = $(code);
-        noRedactorSection = $("<div class='section'><div class='sub-section noRedactor'></div><span class='btn btn-toggle remove'></span></div></div>");
+        noRedactorSection = $("<div class='section' data-type='" + type + "'><div class='sub-section noRedactor'></div><span class='btn btn-toggle remove'></span></div></div>");
         noRedactorSection.find(".sub-section").html(element);
         parentSection.find(".empty").remove();
         parentSection.parents(".section").after(noRedactorSection);
@@ -423,21 +477,29 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
                 Redactor.prototype.showPlusButton(redactor, true);
               }, 10);
             },
-            keyupCallback: function(e) {
-              var aselect, key;
-              key = e.which;
-              Redactor.prototype.lastSection = $(this.selection.getBlock());
+            keydownCallback: function(e) {
               if ((e.keyCode === 8) && $(this.selection.getBlock()).hasClass("empty")) {
                 $(this.selection.getBlock()).remove();
                 if (!this.$element.find("p:not(.empty)").length && ($("#viewDoc").find(".sub-section:not(.noRedactor)").length - 1)) {
                   this.$element.parents(".section").remove();
+                  _docum.find("#media-toolbar").removeClass("active");
+                  Redactor.prototype.lastSectionRemove = true;
+                  return false;
                 }
-                return;
               }
+            },
+            keyupCallback: function(e) {
+              var aselect, key;
+              key = e.which;
+              if (e.keyCode === 8 && Redactor.prototype.lastSectionRemove) {
+                Redactor.prototype.lastSectionRemove = false;
+                return false;
+              }
+              Redactor.prototype.lastSection = $(this.selection.getBlock());
               if (e.keyCode === 13) {
                 this.selection.restore();
                 aselect = $(this.selection.getBlock()).parent();
-                if ($(this.selection.getBlock()).text().trim() === "") {
+                if ($(this.selection.getBlock()).text() === "") {
                   aselect.toggleClass("empty", true);
                   $(this.selection.getBlock()).html("<br/>");
                 }
@@ -500,10 +562,17 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
             Redactor.prototype.lastSection = $(this);
             $("#link-toolbar").removeClass("active").find("#link_value").val("");
             elem = $(event.target);
+            $("#viewDoc").find("a").each(function() {
+              $(this).removeClass("selected");
+              if (!$(this).attr("href").trim().length) {
+                $(this).replaceWith($(this).text());
+              }
+            });
             if (elem[0].tagName.toLowerCase() === "a") {
               offset = elem.offset();
               Redactor.prototype.lastLinkActive = elem.attr("id");
               $("#link_value").val(elem.attr("href"));
+              elem.addClass("selected");
               offset.top = parseInt(offset.top) - 57;
               offset.left = parseInt(offset.left) - 120 + elem.width() / 2;
               Redactor.prototype.linkShow(offset);
@@ -566,7 +635,6 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
             if ($.trim($(this).redactor('code.get')) === "") {
               Redactor.prototype.removeRedactor($(this));
             } else {
-              app.codeSave.add($.trim($(this).redactor('code.get')), "text");
               $(this).redactor("core.destroy");
             }
           }
@@ -592,12 +660,15 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
 
       Redactor.prototype.changeTypeListen = function() {
         _docum.find(".language-list").find(".language").off("click").on("click", function() {
+          $(this).parents(".language-list").find(".language").removeClass("active");
+          $(this).addClass("active");
           Redactor.prototype.changeTypeCode($(this).parent().data().id, $(this).data().type);
         });
       };
 
       Redactor.prototype.changeTypeCode = function(id, type) {
         Redactor.prototype.CodeMirror[id].setOption("mode", type.toLowerCase());
+        _docum.find("#" + id).attr("data-mode", type.toLowerCase());
       };
 
       Redactor.prototype.isEmpty = function(_redactor, element) {
@@ -611,7 +682,7 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
           block = $(_redactor.selection.getCurrent())[0] != null ? $(_redactor.selection.getCurrent()) : $(_redactor.selection.getBlock());
           html = $(_redactor.selection.getBlock()).html();
         }
-        text = block.text().trim();
+        text = block.text();
         if (typeof html === "object" && (html.html() != null)) {
           html = html.html().replace(/[\u200B]/g, '').trim();
         }
