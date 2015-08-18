@@ -749,28 +749,28 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
           }
           toolbar.find(".redactor-act").removeClass("redactor-act");
           $("#link-toolbar").removeClass("active");
-          if (Redactor.prototype.redactor.selection.getHtml().indexOf("<sup") !== -1 || Redactor.prototype.redactor.selection.getParent().tagName.toLowerCase() === "sup") {
+          if (Redactor.prototype.redactor.selection.getHtml().indexOf("<sup") !== -1 || ((Redactor.prototype.redactor.selection.getParent().tagName != null) && Redactor.prototype.redactor.selection.getParent().tagName.toLowerCase() === "sup")) {
             toolbar.find(".re-header1").addClass("redactor-act");
           }
-          if (Redactor.prototype.redactor.selection.getHtml().indexOf("<sub") !== -1 || Redactor.prototype.redactor.selection.getParent().tagName.toLowerCase() === "sub") {
+          if (Redactor.prototype.redactor.selection.getHtml().indexOf("<sub") !== -1 || ((Redactor.prototype.redactor.selection.getParent().tagName != null) && Redactor.prototype.redactor.selection.getParent().tagName.toLowerCase()) === "sub") {
             toolbar.find(".re-header2").addClass("redactor-act");
           }
-          if (Redactor.prototype.redactor.selection.getHtml().indexOf("<a") !== -1 || Redactor.prototype.redactor.selection.getParent().tagName.toLowerCase() === "a") {
+          if (Redactor.prototype.redactor.selection.getHtml().indexOf("<a") !== -1 || ((Redactor.prototype.redactor.selection.getParent().tagName != null) && Redactor.prototype.redactor.selection.getParent().tagName.toLowerCase()) === "a") {
             toolbar.find(".re-link").addClass("redactor-act");
           }
-          if (Redactor.prototype.redactor.selection.getHtml().indexOf("<strong") !== -1 || Redactor.prototype.redactor.selection.getParent().tagName.toLowerCase() === "strong") {
+          if (Redactor.prototype.redactor.selection.getHtml().indexOf("<strong") !== -1 || ((Redactor.prototype.redactor.selection.getParent().tagName != null) && Redactor.prototype.redactor.selection.getParent().tagName.toLowerCase()) === "strong") {
             toolbar.find(".re-bold").addClass("redactor-act");
           }
-          if (Redactor.prototype.redactor.selection.getHtml().indexOf("<em") !== -1 || Redactor.prototype.redactor.selection.getParent().tagName.toLowerCase() === "em") {
+          if (Redactor.prototype.redactor.selection.getHtml().indexOf("<em") !== -1 || ((Redactor.prototype.redactor.selection.getParent().tagName != null) && Redactor.prototype.redactor.selection.getParent().tagName.toLowerCase()) === "em") {
             toolbar.find(".re-italic").addClass("redactor-act");
           }
-          if (Redactor.prototype.redactor.selection.getHtml().indexOf("<del") !== -1 || Redactor.prototype.redactor.selection.getParent().tagName.toLowerCase() === "del") {
+          if (Redactor.prototype.redactor.selection.getHtml().indexOf("<del") !== -1 || ((Redactor.prototype.redactor.selection.getParent().tagName != null) && Redactor.prototype.redactor.selection.getParent().tagName.toLowerCase()) === "del") {
             toolbar.find(".re-deleted").addClass("redactor-act");
           }
-          if (Redactor.prototype.redactor.selection.getHtml().indexOf("<blockquote") !== -1 || Redactor.prototype.redactor.selection.getParent().tagName.toLowerCase() === "blockquote") {
+          if (Redactor.prototype.redactor.selection.getHtml().indexOf("<blockquote") !== -1 || ((Redactor.prototype.redactor.selection.getParent().tagName != null) && Redactor.prototype.redactor.selection.getParent().tagName.toLowerCase() === "blockquote")) {
             toolbar.find(".re-blockquote").addClass("redactor-act");
           }
-          if (Redactor.prototype.redactor.selection.getHtml().indexOf("<center") !== -1 || Redactor.prototype.redactor.selection.getParent().tagName.toLowerCase() === "center") {
+          if (Redactor.prototype.redactor.selection.getHtml().indexOf("<center") !== -1 || ((Redactor.prototype.redactor.selection.getParent().tagName != null) && Redactor.prototype.redactor.selection.getParent().tagName.toLowerCase()) === "center") {
             toolbar.find(".re-alignment").addClass("redactor-act");
           }
         }

@@ -686,14 +686,14 @@ define [
           toolbar.find(".redactor-act").removeClass("redactor-act")
           $("#link-toolbar").removeClass("active")
 
-          toolbar.find(".re-header1").addClass("redactor-act") if Redactor::redactor.selection.getHtml().indexOf("<sup") isnt -1 or Redactor::redactor.selection.getParent().tagName.toLowerCase() == "sup"
-          toolbar.find(".re-header2").addClass("redactor-act") if Redactor::redactor.selection.getHtml().indexOf("<sub") isnt -1 or Redactor::redactor.selection.getParent().tagName.toLowerCase() == "sub"
-          toolbar.find(".re-link").addClass("redactor-act") if Redactor::redactor.selection.getHtml().indexOf("<a") isnt -1 or Redactor::redactor.selection.getParent().tagName.toLowerCase() == "a"
-          toolbar.find(".re-bold").addClass("redactor-act") if Redactor::redactor.selection.getHtml().indexOf("<strong") isnt -1 or Redactor::redactor.selection.getParent().tagName.toLowerCase() == "strong"
-          toolbar.find(".re-italic").addClass("redactor-act") if Redactor::redactor.selection.getHtml().indexOf("<em") isnt -1 or Redactor::redactor.selection.getParent().tagName.toLowerCase() == "em"
-          toolbar.find(".re-deleted").addClass("redactor-act") if Redactor::redactor.selection.getHtml().indexOf("<del") isnt -1 or Redactor::redactor.selection.getParent().tagName.toLowerCase() == "del"
-          toolbar.find(".re-blockquote").addClass("redactor-act") if Redactor::redactor.selection.getHtml().indexOf("<blockquote") isnt -1 or Redactor::redactor.selection.getParent().tagName.toLowerCase() == "blockquote"
-          toolbar.find(".re-alignment").addClass("redactor-act") if Redactor::redactor.selection.getHtml().indexOf("<center") isnt -1 or Redactor::redactor.selection.getParent().tagName.toLowerCase() == "center"
+          toolbar.find(".re-header1").addClass("redactor-act") if Redactor::redactor.selection.getHtml().indexOf("<sup") isnt -1 or (Redactor::redactor.selection.getParent().tagName? and  Redactor::redactor.selection.getParent().tagName.toLowerCase() == "sup")
+          toolbar.find(".re-header2").addClass("redactor-act") if Redactor::redactor.selection.getHtml().indexOf("<sub") isnt -1 or (Redactor::redactor.selection.getParent().tagName? and  Redactor::redactor.selection.getParent().tagName.toLowerCase()) == "sub"
+          toolbar.find(".re-link").addClass("redactor-act") if Redactor::redactor.selection.getHtml().indexOf("<a") isnt -1 or (Redactor::redactor.selection.getParent().tagName? and  Redactor::redactor.selection.getParent().tagName.toLowerCase()) == "a"
+          toolbar.find(".re-bold").addClass("redactor-act") if Redactor::redactor.selection.getHtml().indexOf("<strong") isnt -1 or (Redactor::redactor.selection.getParent().tagName? and  Redactor::redactor.selection.getParent().tagName.toLowerCase()) == "strong"
+          toolbar.find(".re-italic").addClass("redactor-act") if Redactor::redactor.selection.getHtml().indexOf("<em") isnt -1 or (Redactor::redactor.selection.getParent().tagName? and  Redactor::redactor.selection.getParent().tagName.toLowerCase()) == "em"
+          toolbar.find(".re-deleted").addClass("redactor-act") if Redactor::redactor.selection.getHtml().indexOf("<del") isnt -1 or (Redactor::redactor.selection.getParent().tagName? and  Redactor::redactor.selection.getParent().tagName.toLowerCase()) == "del"
+          toolbar.find(".re-blockquote").addClass("redactor-act") if Redactor::redactor.selection.getHtml().indexOf("<blockquote") isnt -1 or (Redactor::redactor.selection.getParent().tagName? and Redactor::redactor.selection.getParent().tagName.toLowerCase() == "blockquote")
+          toolbar.find(".re-alignment").addClass("redactor-act") if Redactor::redactor.selection.getHtml().indexOf("<center") isnt -1 or (Redactor::redactor.selection.getParent().tagName? and  Redactor::redactor.selection.getParent().tagName.toLowerCase()) == "center"
           return
 
       Redactor
