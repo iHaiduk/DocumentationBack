@@ -54,12 +54,12 @@ img {
   font-size: 0; }
   .main .left-side, .main .right-side {
     display: inline-block;
-    width: 30%;
-    padding: 7px 7% 0 15px;
+    width: 23%;
+    padding: 7px 0 0 15px;
     vertical-align: top;
     font-size: 16px; }
   .main .right-side {
-    width: 70%;
+    width: 77%;
     padding: 0 15px 0 0; }
   .main:after {
     content: '';
@@ -200,11 +200,12 @@ img {
     width: 30px;
     height: 30px;
     padding: 0;
+    margin-left: 10%;
     background-size: 100%;
     background-color: #fff;
-    border: none;
     background-image: url("../img/plus.svg");
     opacity: .3;
+    border: none;
     -webkit-transform: rotate(45deg);
     transform: rotate(45deg);
     -webkit-transition: none;
@@ -229,8 +230,8 @@ img {
   display: none;
   position: absolute;
   top: 0;
-  left: 0;
-  margin-left: -55px;
+  left: -55px;
+  margin-left: 10%;
   z-index: 1;
   height: 30px;
   overflow: hidden; }
@@ -396,7 +397,10 @@ body:not(.editing) .CodeMirror-cursors {
 .view {
   position: relative; }
   .view .section-wrap .section {
-    position: relative; }
+    position: relative;
+    padding-left: 10%; }
+    body.editing .view .section-wrap .section {
+      padding-left: 0; }
     .view .section-wrap .section:first-child > .sub-section:first-child > p:first-child > sup:first-child, .view .section-wrap .section:first-child > .sub-section:first-child > p:first-child > sub:first-child {
       padding: 0; }
     .view .section-wrap .section:first-child > .redactor-box .sub-section > p:first-child > sup:first-child, .view .section-wrap .section:first-child > .redactor-box .sub-section > p:first-child > sub:first-child {
@@ -405,6 +409,8 @@ body:not(.editing) .CodeMirror-cursors {
       font-size: 16px;
       line-height: 24px;
       color: rgba(0, 0, 0, 0.95); }
+      body.editing .view .section-wrap .section .sub-section {
+        padding-left: 10%; }
       .view .section-wrap .section .sub-section p {
         min-height: 24px;
         font-size: 16px;
