@@ -9,6 +9,7 @@ define [
   'Application/menu'
   'Application/image'
   'Application/video'
+  'Application/search'
   'codemirror/mode/htmlmixed/htmlmixed'
   'codemirror/mode/clike/clike'
   'codemirror/mode/coffeescript/coffeescript'
@@ -207,7 +208,7 @@ define [
     <input type='file' id="imgInp" />
 </form>
     <img src="" class="image taggd" />"""
-          code: """<textarea class='code' data-mode='htmlmixed'></textarea><ul class="language-list" >
+          code: """<ul class="language-list" >
           <li class="language active" data-type="htmlmixed">HTML</li>
           <li class="language" data-type="CSS">CSS</li>
           <li class="language" data-type="SASS">SASS</li>
@@ -215,7 +216,7 @@ define [
           <li class="language" data-type="coffeescript">CoffeeScript</li>
           <li class="language" data-type="PHP">PHP</li>
           <li class="language" data-type="text/x-mysql">SQL</li>
-</ul>"""
+</ul><textarea class='code' data-mode='htmlmixed'></textarea>"""
           video: """<input class='video' type='text' placeholder='Please insert youtube ID...' />"""
           hr: """<hr/>"""
 

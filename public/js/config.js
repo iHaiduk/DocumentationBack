@@ -10,6 +10,7 @@ app = {
   Image: null,
   Video: null,
   codeSave: null,
+  Search: null,
   path: "../"
 };
 
