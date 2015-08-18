@@ -31,7 +31,6 @@ module.exports = Routes = (function() {
     var i, page;
     for (i in routes) {
       page = routes[i];
-      console.log(page);
       app[page.type](page.link, page.control);
     }
   };

@@ -80,7 +80,6 @@ HomeController = (function() {
       var v;
       if (pages != null) {
         v = new View(res, '../_includes/sectionGenerate');
-        console.log(HomeController.prototype.pages);
         v.getHtml({
           html: JSON.parse(pages.code)
         });

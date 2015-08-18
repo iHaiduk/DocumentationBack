@@ -9,7 +9,6 @@ Socket = (function() {
     if (typeof socketIo === "undefined" || socketIo === null) {
       global["socketIo"] = "wait";
       sockIo.sockets.on('connection', function(socket) {
-        console.log("connected");
         global["socketIo"] = socket;
         _this.init();
       });

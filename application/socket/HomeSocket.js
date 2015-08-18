@@ -20,7 +20,6 @@ HomeSocket = (function(superClass) {
       });
       socketIo.on('add_new_row', function(msg) {
         var test;
-        console.log(socketIo);
         test = new HomeModel(msg.my);
         test.save(function(err, history) {
           socketIo.emit('add_new_row_added', {
