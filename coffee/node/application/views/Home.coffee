@@ -20,3 +20,15 @@ module.exports.prototype =
     if @response and @template
       @response.render @template, data
     return
+  getHtml: (data, cb) ->
+    _this = @
+    if @response and @template
+      @response.render @template, data, (err, html)->
+        if typeof cb is "function"
+          cb html
+        else
+          _this.response.writeHead(200, {'Content-Type': 'text/html'});
+          _this.response.write(html)
+          _this.response.end()
+        return
+      return

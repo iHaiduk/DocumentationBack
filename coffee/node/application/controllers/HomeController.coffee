@@ -5,11 +5,13 @@ Page = require("../models/Page")
 class HomeController
   home: null
   defaultPage: 1
+  pages: null
   run: (req, res)->
     v = new View(res, 'index')
     defaultPage = HomeController::defaultPage
     Page.findOne({page_id: defaultPage}).exec (err, pages)->
       unless pages?
+        HomeController::pages = pages
         baseText = [
           param: "text"
           code: """<p><sup>Hello to Documentation page!</sup></p><p>This is your first page.</p>"""
@@ -44,6 +46,18 @@ class HomeController
         page.save (err) ->
           v.send answ: true
           return
+        return
+    return
+
+  cancel: (req, res) ->
+    defaultPage = HomeController::defaultPage
+    Page.findOne({page_id: defaultPage}).exec (err, pages)->
+      if pages?
+        v = new View(res, '../_includes/sectionGenerate')
+        console.log(HomeController::pages)
+        v.getHtml(
+          html: JSON.parse pages.code
+        )
         return
     return
 

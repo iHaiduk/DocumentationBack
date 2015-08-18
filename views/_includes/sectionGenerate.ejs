@@ -1,0 +1,37 @@
+<div class="section-wrap" >
+    <% for(var i=0; i<html.length; i++) {%>
+    <div class="section" data-type="<%=html[i].param%>">
+        <div class="sub-section <%if(html[i].param!="text"){%><%= "noRedactor" %><%} %>">
+            <%if(html[i].param=="image"){%>
+            <img src="<%- html[i].code %>" class="image taggd" id="<%- html[i].data.id %>" />
+            <script>
+                dataImages["<%- html[i].data.id %>"] =  <%- JSON.stringify(html[i].data.data) %>;
+            </script>
+            <%}else if(html[i].param=="video"){%>
+            <div class="videoView" data-youtube-id='<%= html[i].code %>' data-ratio="16:9"></div>
+            <%}else if(html[i].param=="code"){%>
+            <textarea class="code" data-mode="<%= html[i].data.type %>" id="<%= html[i].data.id %>"><%- html[i].code %></textarea>
+            <ul class="language-list" data-id="<%= html[i].data.id %>">
+                <li class="language <% if(html[i].data.type.toLowerCase()=="htmlmixed"){%>active<%}%>" data-type="htmlmixed">HTML</li>
+                <li class="language <% if(html[i].data.type.toLowerCase()=="css"){%>active<%}%>" data-type="CSS">CSS</li>
+                <li class="language <% if(html[i].data.type.toLowerCase()=="sass"){%>active<%}%>" data-type="SASS">SASS</li>
+                <li class="language <% if(html[i].data.type.toLowerCase()=="javascript"){%>active<%}%>" data-type="JavaScript">JavaScript</li>
+                <li class="language <% if(html[i].data.type.toLowerCase()=="coffeescript"){%>active<%}%>" data-type="coffeescript">CoffeeScript</li>
+                <li class="language <% if(html[i].data.type.toLowerCase()=="php"){%>active<%}%>" data-type="PHP">PHP</li>
+                <li class="language <% if(html[i].data.type.toLowerCase()=="text/x-mysql"){%>active<%}%>" data-type="text/x-mysql">SQL</li>
+            </ul>
+            <%}else{ %>
+            <%- html[i].code %>
+            <%} %>
+        </div>
+        <%if(html[i].param!="text"){%><span class="btn btn-toggle remove"></span><%} %>
+    </div>
+    <%if(i==(html.length-1) && html[i].param!="text"){%>
+    <div class="section" data-type="text">
+        <div class="sub-section">
+            <p></p>
+        </div>
+    </div>
+    <% } %>
+    <% } %>
+</div>

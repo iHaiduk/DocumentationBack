@@ -179,6 +179,17 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
         });
       };
 
+      CodeSave.prototype.cancel = function(cb) {
+        CodeSave.prototype.clean();
+        $.ajax({
+          url: "/cancel",
+          type: "get",
+          success: function(data) {
+            cb(data);
+          }
+        });
+      };
+
       return CodeSave;
 
     })();
@@ -232,6 +243,18 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
             _docum.find(".selected").removeClass("selected");
             app.codeSave.send();
           }
+        });
+        Redactor.prototype.document.find("#cancelRedactor").off('click').on('click', function() {
+          Redactor.prototype.document.find("#initRedactor").removeClass("btn-save").addClass("btn-edit");
+          $("body").removeClass("editing");
+          app.codeSave.cancel(function(html) {
+            _docum.find("#viewDoc").html(html);
+            _docum.find(".selected").removeClass("selected");
+            Redactor.prototype.save();
+            app.Image.save();
+            _docum.find(".selected").removeClass("selected");
+            Redactor.prototype.init();
+          });
         });
         Redactor.prototype.document.find(".code").each(function() {
           Redactor.prototype.CodeMirror[$(this).attr("id")] = CodeMirror.fromTextArea(this, {

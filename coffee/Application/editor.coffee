@@ -166,6 +166,17 @@ define [
         )
         return
 
+      CodeSave::cancel = (cb)->
+        CodeSave::clean()
+        $.ajax(
+          url: "/cancel"
+          type: "get"
+          success: (data)->
+            cb data
+            return
+        )
+        return
+
     class Redactor
       constructor: (document, nameElement) ->
         Redactor::redactor = null
@@ -225,6 +236,19 @@ define [
             app.Image.save()
             _docum.find(".selected").removeClass("selected")
             app.codeSave.send()
+          return
+
+        Redactor::document.find("#cancelRedactor").off('click').on 'click', ->
+          Redactor::document.find("#initRedactor").removeClass("btn-save").addClass "btn-edit"
+          $("body").removeClass "editing"
+          app.codeSave.cancel (html)->
+            _docum.find("#viewDoc").html(html)
+            _docum.find(".selected").removeClass("selected")
+            Redactor::save()
+            app.Image.save()
+            _docum.find(".selected").removeClass("selected")
+            Redactor::init();
+            return
           return
 
         Redactor::document.find(".code").each ->

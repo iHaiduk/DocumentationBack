@@ -13,6 +13,13 @@ routes =
 			HomeController::save(req, res)
 			return
 
+	cancel:
+		type: 'get'
+		link: '/cancel'
+		control: (req, res) ->
+			HomeController::cancel(req, res)
+			return
+
 module.exports = class Routes
 	init: (app)->
 		for i of routes

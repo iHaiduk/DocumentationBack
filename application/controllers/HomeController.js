@@ -13,6 +13,8 @@ HomeController = (function() {
 
   HomeController.prototype.defaultPage = 1;
 
+  HomeController.prototype.pages = null;
+
   HomeController.prototype.run = function(req, res) {
     var defaultPage, v;
     v = new View(res, 'index');
@@ -22,6 +24,7 @@ HomeController = (function() {
     }).exec(function(err, pages) {
       var baseText, page;
       if (pages == null) {
+        HomeController.prototype.pages = pages;
         baseText = [
           {
             param: "text",
@@ -66,6 +69,23 @@ HomeController = (function() {
         });
       });
     }
+  };
+
+  HomeController.prototype.cancel = function(req, res) {
+    var defaultPage;
+    defaultPage = HomeController.prototype.defaultPage;
+    Page.findOne({
+      page_id: defaultPage
+    }).exec(function(err, pages) {
+      var v;
+      if (pages != null) {
+        v = new View(res, '../_includes/sectionGenerate');
+        console.log(HomeController.prototype.pages);
+        v.getHtml({
+          html: JSON.parse(pages.code)
+        });
+      }
+    });
   };
 
   return HomeController;

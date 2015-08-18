@@ -14,6 +14,13 @@ routes = {
     control: function(req, res) {
       HomeController.prototype.save(req, res);
     }
+  },
+  cancel: {
+    type: 'get',
+    link: '/cancel',
+    control: function(req, res) {
+      HomeController.prototype.cancel(req, res);
+    }
   }
 };
 
