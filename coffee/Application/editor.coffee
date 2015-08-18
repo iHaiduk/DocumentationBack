@@ -52,6 +52,9 @@ define [
           $(@selection.getBlock()).html($(@selection.getBlock()).text())
         @code.sync()
         @observe.load()
+        _block.find("sup").each ->
+          $(@).remove() if !$(@).text().trim().length
+          return
         return
       insertH2: (key)->
         @selection.restore()
@@ -64,6 +67,9 @@ define [
           $(@selection.getBlock()).html($(@selection.getBlock()).text())
         @code.sync()
         @observe.load()
+        _block.find("sub").each ->
+          $(@).remove() if !$(@).text().trim().length
+          return
         return
       center: ->
         @selection.restore();
@@ -537,7 +543,7 @@ define [
           Redactor::listenEvent(element)
           return
         )
-        element.off('mousedown mouseup').on('mousedown mouseup', (event) ->
+        element.off('mousedown mouseup keyup').on('mousedown mouseup keyup', (event) ->
           if event.type == 'mousedown'
             Redactor::position.start.y = event.pageY
             Redactor::position.start.x = event.pageX
@@ -614,16 +620,13 @@ define [
             else
               $(@).redactor("core.destroy")
               return
-        setTimeout(->
-          app.Menu.treeGenerate()
-          cnt = $("#viewDoc").find("p").length
-          $($("#viewDoc").find("p").get().reverse()).each ->
-            if !$(@).text().trim().length and cnt > 1
-              $(@).remove()
-              cnt--
-            return
+        app.Menu.treeGenerate()
+        cnt = $("#viewDoc").find("p").length
+        $($("#viewDoc").find("p").get().reverse()).each ->
+          if !$(@).text().trim().length and cnt > 1
+            $(@).remove()
+            cnt--
           return
-        , 10)
         return
 
       Redactor::codeSave = ->

@@ -33,12 +33,7 @@ HomeController = (function() {
         ];
         page = new Page({
           page_id: defaultPage,
-          code: [
-            {
-              param: "text",
-              code: JSON.stringify(baseText)
-            }
-          ]
+          code: JSON.stringify(baseText)
         });
         page.save(function(err) {
           v.render({

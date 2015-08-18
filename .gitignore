@@ -46,3 +46,5 @@ Temporary Items
 node_modules
 coffee/_tempCoffee/*
 .sass-cache
+application/config/index.js
+coffee/node/application/config/index.coffee

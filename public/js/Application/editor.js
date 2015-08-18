@@ -38,6 +38,11 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
           }
           this.code.sync();
           this.observe.load();
+          _block.find("sup").each(function() {
+            if (!$(this).text().trim().length) {
+              $(this).remove();
+            }
+          });
         },
         insertH2: function(key) {
           var _block, _html;
@@ -52,6 +57,11 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
           }
           this.code.sync();
           this.observe.load();
+          _block.find("sub").each(function() {
+            if (!$(this).text().trim().length) {
+              $(this).remove();
+            }
+          });
         },
         center: function() {
           this.selection.restore();
@@ -581,7 +591,7 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
           Redactor.prototype.redactor.observe.load();
           Redactor.prototype.listenEvent(element);
         });
-        element.off('mousedown mouseup').on('mousedown mouseup', function(event) {
+        element.off('mousedown mouseup keyup').on('mousedown mouseup keyup', function(event) {
           var elem, offset, selection, toolbar;
           if (event.type === 'mousedown') {
             Redactor.prototype.position.start.y = event.pageY;
@@ -654,6 +664,7 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
       };
 
       Redactor.prototype.save = function(codeSave) {
+        var cnt;
         if (codeSave == null) {
           codeSave = true;
         }
@@ -670,17 +681,14 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
             }
           }
         });
-        setTimeout(function() {
-          var cnt;
-          app.Menu.treeGenerate();
-          cnt = $("#viewDoc").find("p").length;
-          $($("#viewDoc").find("p").get().reverse()).each(function() {
-            if (!$(this).text().trim().length && cnt > 1) {
-              $(this).remove();
-              cnt--;
-            }
-          });
-        }, 10);
+        app.Menu.treeGenerate();
+        cnt = $("#viewDoc").find("p").length;
+        $($("#viewDoc").find("p").get().reverse()).each(function() {
+          if (!$(this).text().trim().length && cnt > 1) {
+            $(this).remove();
+            cnt--;
+          }
+        });
       };
 
       Redactor.prototype.codeSave = function() {
