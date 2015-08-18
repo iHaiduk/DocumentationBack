@@ -5,7 +5,6 @@ class Socket
     if not socketIo?
       global["socketIo"] = "wait"
       sockIo.sockets.on 'connection', (socket) ->
-        console.log("connected")
         global["socketIo"] = socket
         _this.init()
         return

@@ -54,7 +54,6 @@ class HomeController
     Page.findOne({page_id: defaultPage}).exec (err, pages)->
       if pages?
         v = new View(res, '../_includes/sectionGenerate')
-        console.log(HomeController::pages)
         v.getHtml(
           html: JSON.parse pages.code
         )

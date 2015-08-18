@@ -24,6 +24,5 @@ module.exports = class Routes
 	init: (app)->
 		for i of routes
 			page = routes[i]
-			console.log page
 			app[page.type] page.link, page.control
 		return

@@ -6,7 +6,6 @@ class HomeSocket extends Socket
     if @isConnected()
       socketIo.emit 'news', hello: 'world'
       socketIo.on 'add_new_row', (msg) ->
-        console.log(socketIo)
         test = new HomeModel(msg.my)
         test.save (err, history)->
 
