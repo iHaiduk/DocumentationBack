@@ -2,7 +2,7 @@ var _Config;
 
 _Config = {
   url: "127.0.0.1",
-  port: 3001,
+  port: 80,
   mode: "local",
   socket: true,
   publicFolder: "public",
@@ -12,9 +12,9 @@ _Config = {
     mongo: {
       host: "127.0.0.1",
       port: 27017,
-      user: "",
-      password: "",
-      table: "siteBilder"
+      user: "document",
+      password: "234gn2A23+XX9",
+      table: "document"
     }
   }
 };

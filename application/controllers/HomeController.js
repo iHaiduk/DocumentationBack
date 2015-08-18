@@ -11,7 +11,7 @@ HomeController = (function() {
 
   HomeController.prototype.home = null;
 
-  HomeController.prototype.defaultPage = 1;
+  HomeController.prototype.defaultPage = 3;
 
   HomeController.prototype.pages = null;
 

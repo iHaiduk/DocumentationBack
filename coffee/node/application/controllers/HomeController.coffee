@@ -4,7 +4,7 @@ Page = require("../models/Page")
 
 class HomeController
   home: null
-  defaultPage: 1
+  defaultPage: 3
   pages: null
   run: (req, res)->
     v = new View(res, 'index')
