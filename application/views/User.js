@@ -30,5 +30,22 @@ module.exports.prototype = {
     if (this.response && this.template) {
       this.response.render(this.template, data);
     }
+  },
+  getHtml: function(data, cb) {
+    var _this;
+    _this = this;
+    if (this.response && this.template) {
+      this.response.render(this.template, data, function(err, html) {
+        if (typeof cb === "function") {
+          cb(html);
+        } else {
+          _this.response.writeHead(200, {
+            'Content-Type': 'text/html'
+          });
+          _this.response.write(html);
+          _this.response.end();
+        }
+      });
+    }
   }
 };

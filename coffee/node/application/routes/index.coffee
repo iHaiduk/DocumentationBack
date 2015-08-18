@@ -3,6 +3,20 @@ routes =
 		type: 'get'
 		link: '/'
 		control: (req, res) ->
+			UserController::index(req, res)
+			return
+
+	signin:
+		type: 'post'
+		link: '/signin'
+		control: (req, res) ->
+			UserController::signin(req, res)
+			return
+
+	redactor:
+		type: 'get'
+		link: '/redactor'
+		control: (req, res) ->
 			HomeController::run(req, res)
 			return
 
@@ -15,7 +29,7 @@ routes =
 
 	cancel:
 		type: 'get'
-		link: '/cancel'
+		link: '/cancel/'
 		control: (req, res) ->
 			HomeController::cancel(req, res)
 			return

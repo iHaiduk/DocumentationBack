@@ -5,6 +5,20 @@ routes = {
     type: 'get',
     link: '/',
     control: function(req, res) {
+      UserController.prototype.index(req, res);
+    }
+  },
+  signin: {
+    type: 'post',
+    link: '/signin',
+    control: function(req, res) {
+      UserController.prototype.signin(req, res);
+    }
+  },
+  redactor: {
+    type: 'get',
+    link: '/redactor',
+    control: function(req, res) {
       HomeController.prototype.run(req, res);
     }
   },
@@ -17,7 +31,7 @@ routes = {
   },
   cancel: {
     type: 'get',
-    link: '/cancel',
+    link: '/cancel/',
     control: function(req, res) {
       HomeController.prototype.cancel(req, res);
     }

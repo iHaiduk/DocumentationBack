@@ -16,14 +16,14 @@
 <body>
 
 <div class="authorization">
-    <form action="" class="auth">
+    <form action="/signin" method="POST" class="auth">
         <div class="row">
             <label class="auth-label" for="userName">Your username</label>
-            <input class="auth-field" type="text" id="userName" />
+            <input class="auth-field" type="text" name="name" id="userName" />
         </div>
         <div class="row">
             <label class="auth-label" for="password">Password</label>
-            <input class="auth-field" type="text" id="password" />
+            <input class="auth-field" type="password" name="password" id="password" />
         </div>
         <input class="sign-in" type="submit" value="Sign in" />
     </form>
