@@ -76,7 +76,7 @@ img {
   background: #fff;
   z-index: 99;
   box-shadow: 0 0 10px #eee; }
-  .header .subject, .header .user {
+  .header .subject {
     position: absolute;
     top: 0;
     left: 15px;
@@ -84,26 +84,44 @@ img {
     color: #484848;
     text-decoration: none;
     line-height: 60px; }
-    @media (max-width: 1520px) {
-      .header .subject, .header .user {
+    @media (max-width: 1670px) {
+      .header .subject {
         line-height: 36px; } }
-  .header .user {
-    left: auto;
+  .header .user-wrap {
+    position: absolute;
     right: 10px;
     top: 12px;
-    margin: 0;
     width: 36px;
-    height: 36px;
-    border: 1px solid #DEDEDE;
-    border-radius: 100%;
-    overflow: hidden; }
-    @media (max-width: 1520px) {
-      .header .user {
+    margin: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    -webkit-transition: all 0.2s;
+    transition: all 0.2s; }
+    @media (max-width: 1670px) {
+      .header .user-wrap {
         top: 0; } }
-  @media (max-width: 1520px) {
+    .header .user-wrap:hover {
+      width: 100px; }
+    .header .user-wrap .user {
+      display: inline-block;
+      vertical-align: top;
+      width: 36px;
+      height: 36px;
+      border: 1px solid rgba(0, 0, 0, 0.15);
+      border-radius: 100%;
+      background: url("../img/user.svg") center no-repeat;
+      background-size: 20px 20px; }
+    .header .user-wrap .logout {
+      display: inline-block;
+      vertical-align: top;
+      font-size: 15px;
+      color: #484848;
+      line-height: 34px;
+      text-decoration: none; }
+  @media (max-width: 1670px) {
     .header .wrap {
       max-width: 100%;
-      padding: 0 53px 0 100px;
+      padding: 0 130px;
       position: relative; } }
 
 .search {
@@ -401,9 +419,9 @@ body:not(.editing) .CodeMirror-cursors {
     padding-left: 10%; }
     body.editing .view .section-wrap .section {
       padding-left: 0; }
-    .view .section-wrap .section:first-child > .sub-section:first-child > p:first-child > sup:first-child, .view .section-wrap .section:first-child > .sub-section:first-child > p:first-child > sub:first-child {
+    .view .section-wrap .section:first-child > .sub-section:first-child > p:first-child > sup, .view .section-wrap .section:first-child > .sub-section:first-child > p:first-child > sub {
       padding: 0; }
-    .view .section-wrap .section:first-child > .redactor-box .sub-section > p:first-child > sup:first-child, .view .section-wrap .section:first-child > .redactor-box .sub-section > p:first-child > sub:first-child {
+    .view .section-wrap .section:first-child > .redactor-box .sub-section > p:first-child > sup, .view .section-wrap .section:first-child > .redactor-box .sub-section > p:first-child > sub {
       padding: 0; }
     .view .section-wrap .section .sub-section {
       font-size: 16px;

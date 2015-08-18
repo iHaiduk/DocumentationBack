@@ -50,19 +50,31 @@ img { vertical-align: top; max-width: 100%; }
 
     .subject { position: absolute; top: 0; left: 15px; font-size: 15px; color: #484848; text-decoration: none; line-height: 60px;
 
-        @include custom_breakpoint(1520) { line-height: 36px; }
+        @include custom_breakpoint(1670) { line-height: 36px; }
 
     }
 
-    .user { @extend .subject; left: auto; right: 10px; top: 12px; margin: 0; width: 36px; height: 36px; border: 1px solid #DEDEDE; border-radius: 100%; overflow: hidden;
+    .user-wrap { position: absolute; right: 10px; top: 12px; width: 36px; margin: 0; overflow: hidden; white-space: nowrap;
 
-        @include custom_breakpoint(1520) { top: 0; }
+        @include custom_breakpoint(1670) { top: 0; }
+
+        @include prefix(( transition: all .2s ), webkit );
+
+        &:hover { width: 100px; }
+
+        .user { display: inline-block; vertical-align: top; width: 36px; height: 36px; border: 1px solid fade-out($black, .85); border-radius: 100%; background: url("../img/user.svg") center no-repeat;
+
+            background-size: 20px 20px;
+
+        }
+
+        .logout { display: inline-block; vertical-align: top; font-size: 15px; color: #484848; line-height: 34px; text-decoration: none; }
 
     }
 
     .wrap {
 
-        @include custom_breakpoint(1520) { max-width: 100%; padding: 0 53px 0 100px; position: relative; }
+        @include custom_breakpoint(1670) { max-width: 100%; padding: 0 130px; position: relative; }
 
     }
 
@@ -302,9 +314,9 @@ body:not(.editing) {
 
             &:first-child {
 
-                > .sub-section:first-child > p:first-child > sup:first-child { padding: 0; }
+                > .sub-section:first-child > p:first-child > sup { padding: 0; }
 
-                > .redactor-box .sub-section > p:first-child > sup:first-child { padding: 0; }
+                > .redactor-box .sub-section > p:first-child > sup { padding: 0; }
 
             }
 
