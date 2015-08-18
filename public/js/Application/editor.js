@@ -220,7 +220,7 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
         Redactor.prototype.template = {
           empty: "<div class=\"section\" data-type=\"text\">\n    <div class=\"sub-section\"></div>\n</div>",
           image: "<form id=\"form1\" runat=\"server\">\n<label for='imgInp' id='uploadImage'></label>\n    <input type='file' id=\"imgInp\" />\n</form>\n    <img src=\"\" class=\"image taggd\" />",
-          code: "<ul class=\"language-list\" >\n<li class=\"language active\" data-type=\"htmlmixed\">HTML</li>\n<li class=\"language\" data-type=\"CSS\">CSS</li>\n<li class=\"language\" data-type=\"SASS\">SASS</li>\n<li class=\"language\" data-type=\"JavaScript\">JavaScript</li>\n<li class=\"language\" data-type=\"coffeescript\">CoffeeScript</li>\n<li class=\"language\" data-type=\"PHP\">PHP</li>\n<li class=\"language\" data-type=\"text/x-mysql\">SQL</li>\n</ul><textarea class='code' data-mode='htmlmixed'></textarea>",
+          code: "<textarea class='code' data-mode='htmlmixed'></textarea><ul class=\"language-list\" >\n<li class=\"language active\" data-type=\"htmlmixed\">HTML</li>\n<li class=\"language\" data-type=\"CSS\">CSS</li>\n<li class=\"language\" data-type=\"SASS\">SASS</li>\n<li class=\"language\" data-type=\"JavaScript\">JavaScript</li>\n<li class=\"language\" data-type=\"coffeescript\">CoffeeScript</li>\n<li class=\"language\" data-type=\"PHP\">PHP</li>\n<li class=\"language\" data-type=\"text/x-mysql\">SQL</li>\n</ul>",
           video: "<input class='video' type='text' placeholder='Please insert youtube ID...' />",
           hr: "<hr/>"
         };

@@ -10,6 +10,7 @@
             <%}else if(html[i].param=="video"){%>
             <div class="videoView" data-youtube-id='<%= html[i].code %>' data-ratio="16:9"></div>
             <%}else if(html[i].param=="code"){%>
+            <textarea class="code" data-mode="<%= html[i].data.type %>" id="<%= html[i].data.id %>"><%- html[i].code %></textarea>
             <ul class="language-list" data-id="<%= html[i].data.id %>">
                 <li class="language <% if(html[i].data.type.toLowerCase()=="htmlmixed"){%>active<%}%>" data-type="htmlmixed">HTML</li>
                 <li class="language <% if(html[i].data.type.toLowerCase()=="css"){%>active<%}%>" data-type="CSS">CSS</li>
@@ -19,7 +20,6 @@
                 <li class="language <% if(html[i].data.type.toLowerCase()=="php"){%>active<%}%>" data-type="PHP">PHP</li>
                 <li class="language <% if(html[i].data.type.toLowerCase()=="text/x-mysql"){%>active<%}%>" data-type="text/x-mysql">SQL</li>
             </ul>
-            <textarea class="code" data-mode="<%= html[i].data.type %>" id="<%= html[i].data.id %>"><%- html[i].code %></textarea>
             <%}else{ %>
             <%- html[i].code %>
             <%} %>
