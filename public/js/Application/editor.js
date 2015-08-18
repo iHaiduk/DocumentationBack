@@ -157,7 +157,7 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
               code = sub.html();
           }
           if (code != null) {
-            return CodeSave.prototype.code.push({
+            CodeSave.prototype.code.push({
               param: type,
               code: code,
               data: data
@@ -169,7 +169,7 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
       CodeSave.prototype.send = function() {
         CodeSave.prototype.clean();
         CodeSave.prototype.add();
-        return $.ajax({
+        $.ajax({
           url: "/save",
           type: "post",
           data: {
@@ -558,7 +558,7 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
           Redactor.prototype.redactor.observe.load();
           Redactor.prototype.listenEvent(element);
         });
-        return element.off('mousedown mouseup').on('mousedown mouseup', function(event) {
+        element.off('mousedown mouseup').on('mousedown mouseup', function(event) {
           var elem, offset, selection, toolbar;
           if (event.type === 'mousedown') {
             Redactor.prototype.position.start.y = event.pageY;

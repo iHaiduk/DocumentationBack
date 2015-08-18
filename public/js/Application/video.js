@@ -1,7 +1,7 @@
 define(['jquery', 'taggd', 'video', 'Application/editor'], function($, taggd) {
   var _docum;
   _docum = $(document);
-  return _docum.ready(function() {
+  _docum.ready(function() {
     var Video, video;
     Video = (function() {
       function Video(document, nameElement) {}
@@ -21,6 +21,6 @@ define(['jquery', 'taggd', 'video', 'Application/editor'], function($, taggd) {
 
     })();
     video = new Video;
-    return app.Video = video.init();
+    app.Video = video.init();
   });
 });

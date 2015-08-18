@@ -22,7 +22,7 @@ define [
       ImageTolltip::init = ->
         if ImageTolltip::tag.length
           ImageTolltip::tag.each ->
-            $(@).taggd $.extend(true, ImageTolltip::option,{edit:false}), ImageTolltip::data[$(@).attr("id")] if ImageTolltip::data[$(@).attr("id")]?
+            $(@).taggd $.extend(false, ImageTolltip::option,{edit:false, handlers:{mouseenter: 'show',mouseleave: 'hide', click: 'toggle'}}), ImageTolltip::data[$(@).attr("id")] if ImageTolltip::data[$(@).attr("id")]?
             return
         @
 
@@ -46,6 +46,7 @@ define [
 
       ImageTolltip::save = ->
         ImageTolltip::destroy()
+        ImageTolltip::tag = _docum.find('.taggd')
         ImageTolltip::init()
         return
 
@@ -61,8 +62,6 @@ define [
             return
         return
 
-
-
     image = new ImageTolltip()
-    app.Image = image.init()
+    app.Image = image
     return

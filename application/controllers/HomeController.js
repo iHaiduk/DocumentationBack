@@ -17,7 +17,7 @@ HomeController = (function() {
     var defaultPage, v;
     v = new View(res, 'index');
     defaultPage = HomeController.prototype.defaultPage;
-    return Page.findOne({
+    Page.findOne({
       page_id: defaultPage
     }).exec(function(err, pages) {
       var baseText, page;
@@ -37,7 +37,7 @@ HomeController = (function() {
             }
           ]
         });
-        return page.save(function(err) {
+        page.save(function(err) {
           v.render({
             html: baseText
           });

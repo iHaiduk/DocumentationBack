@@ -27,11 +27,13 @@ class HomeController
           )
           return
         )
+        return
       else
         v.render(
           html: JSON.parse pages.code
         )
         return
+    return
 
   save: (req, res) ->
     if req.body? and req.body.code?

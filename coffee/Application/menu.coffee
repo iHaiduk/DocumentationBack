@@ -16,7 +16,6 @@ define [ 'jquery', 'Application/editor' ], ($) ->
 
       Menu::init = ()->
         Menu::treeGenerate()
-        Menu::addBottomPadding()
         $(window).off('scroll').on('scroll', ->
           Menu::fixed()
           Menu::offsetTop()
@@ -30,20 +29,6 @@ define [ 'jquery', 'Application/editor' ], ($) ->
         top = $(window).scrollTop()
         _document.find(".header.cf").toggleClass('shadow', top > 0)
         Menu::navigation.find("ul.nav").css 'margin-top': top + 'px'
-        return
-
-      Menu::addBottomPadding = () ->
-        return
-        arr = jQuery.grep(_document.find("#viewDoc").find("sup,sub"), (val) ->
-          true
-        )
-        summ = $(arr[arr.length - 1]).parents(".section").height()
-        $(arr[arr.length-1]).parents(".section").nextAll(".section").each ->
-          summ += $(@).height()
-
-        _document.find(".right-side").css(
-          "padding-bottom": $(window).height() - summ - _document.find(".header").outerHeight() - _document.find(".footer").outerHeight() - 31 + "px"
-        )
         return
 
       Menu::treeGenerate = ()->
@@ -75,7 +60,6 @@ define [ 'jquery', 'Application/editor' ], ($) ->
         Menu::navigation.html(Menu::treeHTMLGenerate())
         Menu::fixed()
         Menu::offsetTop()
-        Menu::addBottomPadding()
         Menu::listens()
         return
 
@@ -134,4 +118,6 @@ define [ 'jquery', 'Application/editor' ], ($) ->
 
     menu = new Menu()
     app.Menu = menu.init()
+    return
+  return
 

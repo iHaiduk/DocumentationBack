@@ -30,8 +30,13 @@ define(['jquery', 'taggd', 'Application/editor'], function($, taggd) {
         if (ImageTolltip.prototype.tag.length) {
           ImageTolltip.prototype.tag.each(function() {
             if (ImageTolltip.prototype.data[$(this).attr("id")] != null) {
-              $(this).taggd($.extend(true, ImageTolltip.prototype.option, {
-                edit: false
+              $(this).taggd($.extend(false, ImageTolltip.prototype.option, {
+                edit: false,
+                handlers: {
+                  mouseenter: 'show',
+                  mouseleave: 'hide',
+                  click: 'toggle'
+                }
               }), ImageTolltip.prototype.data[$(this).attr("id")]);
             }
           });
@@ -67,6 +72,7 @@ define(['jquery', 'taggd', 'Application/editor'], function($, taggd) {
 
       ImageTolltip.prototype.save = function() {
         ImageTolltip.prototype.destroy();
+        ImageTolltip.prototype.tag = _docum.find('.taggd');
         ImageTolltip.prototype.init();
       };
 
@@ -89,6 +95,6 @@ define(['jquery', 'taggd', 'Application/editor'], function($, taggd) {
 
     })();
     image = new ImageTolltip();
-    app.Image = image.init();
+    app.Image = image;
   });
 });

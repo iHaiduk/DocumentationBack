@@ -22,3 +22,5 @@ define [
 
     video = new Video
     app.Video = video.init()
+    return
+  return

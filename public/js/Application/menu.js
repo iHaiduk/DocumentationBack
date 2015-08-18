@@ -1,7 +1,7 @@
 define(['jquery', 'Application/editor'], function($) {
   var _document;
   _document = $(document);
-  return _document.ready(function() {
+  _document.ready(function() {
     var Menu, menu;
     Menu = (function() {
       function Menu() {
@@ -19,7 +19,6 @@ define(['jquery', 'Application/editor'], function($) {
 
       Menu.prototype.init = function() {
         Menu.prototype.treeGenerate();
-        Menu.prototype.addBottomPadding();
         $(window).off('scroll').on('scroll', function() {
           Menu.prototype.fixed();
           Menu.prototype.offsetTop();
@@ -35,21 +34,6 @@ define(['jquery', 'Application/editor'], function($) {
         _document.find(".header.cf").toggleClass('shadow', top > 0);
         Menu.prototype.navigation.find("ul.nav").css({
           'margin-top': top + 'px'
-        });
-      };
-
-      Menu.prototype.addBottomPadding = function() {
-        var arr, summ;
-        return;
-        arr = jQuery.grep(_document.find("#viewDoc").find("sup,sub"), function(val) {
-          return true;
-        });
-        summ = $(arr[arr.length - 1]).parents(".section").height();
-        $(arr[arr.length - 1]).parents(".section").nextAll(".section").each(function() {
-          return summ += $(this).height();
-        });
-        _document.find(".right-side").css({
-          "padding-bottom": $(window).height() - summ - _document.find(".header").outerHeight() - _document.find(".footer").outerHeight() - 31 + "px"
         });
       };
 
@@ -81,7 +65,6 @@ define(['jquery', 'Application/editor'], function($) {
         Menu.prototype.navigation.html(Menu.prototype.treeHTMLGenerate());
         Menu.prototype.fixed();
         Menu.prototype.offsetTop();
-        Menu.prototype.addBottomPadding();
         Menu.prototype.listens();
       };
 
@@ -145,6 +128,6 @@ define(['jquery', 'Application/editor'], function($) {
 
     })();
     menu = new Menu();
-    return app.Menu = menu.init();
+    app.Menu = menu.init();
   });
 });

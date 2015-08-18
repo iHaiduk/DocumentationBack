@@ -152,6 +152,7 @@ define [
               code: code
               data: data
             )
+            return
         return
 
       CodeSave::send = ->
@@ -163,6 +164,7 @@ define [
           data: { code: JSON.stringify(CodeSave::code) }
           dataType: "json"
         )
+        return
 
     class Redactor
       constructor: (document, nameElement) ->
@@ -546,6 +548,7 @@ define [
 
           return
         )
+        return
 
       Redactor::findLink = (_redactor)->
         parent = if (_ref =_redactor.selection.getParent()) then $(_ref) else false
