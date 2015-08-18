@@ -22,9 +22,9 @@ html, body { height: 100%; }
 
 body { padding-top: 104px; margin: 0; font-family: "Verdana"; background: $white; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; overflow-x: hidden;
 
-    ::-moz-selection { background: #3297FD; padding-top: 5px; color: #fff; }
+    ::-moz-selection { background: #3297FD; color: #fff !important; }
 
-    ::selection { background: #3297FD; padding-top: 5px; color: #fff; }
+    ::selection { background: #3297FD; color: #fff; }
 
     @include custom_breakpoint(800) { overflow-x: auto; }
 
@@ -68,7 +68,7 @@ img { vertical-align: top; max-width: 100%; }
 
 }
 
-.search { float: right; width: 25%; padding-left: 45px;
+.search { float: right; width: 25%; margin-left: 20px;
 
     .search-wrap { position: relative;
 
@@ -116,6 +116,12 @@ img { vertical-align: top; max-width: 100%; }
 
     &.icon-code { background-image: url("../img/code.svg"); }
 
+    &.btn-cancel { display: none; float: right; margin-right: 20px;
+
+        body.editing & { display: block; }
+
+    }
+
     &.icon-hr { background-image: url("../img/empty.svg"); }
 
     &.remove { position: absolute; top: -3px; left: -55px; width: 30px; height: 30px; padding: 0; background-size: 100%; background-color: $white; border: none; background-image: url("../img/plus.svg");
@@ -128,7 +134,7 @@ img { vertical-align: top; max-width: 100%; }
 
     }
 
-    &.btn-accept { float: right; width: 80px; margin-right: -37px;
+    &.btn-accept { float: right; width: 80px;
 
         &.btn-edit {
 
@@ -226,13 +232,12 @@ img { vertical-align: top; max-width: 100%; }
 
 body:not(.editing) {
 
-    .media-toolbar { display: none; }
-
-    .language-list { display: none; }
+    .media-toolbar,
+    .language-list,
+    .link,
+    .remove { display: none; }
 
     .empty:before { display: none !important; }
-
-    .remove { display: none; }
 
     .CodeMirror-cursors { visibility: hidden !important; }
 
@@ -321,9 +326,13 @@ body:not(.editing) {
 
                 hr { height: 24px; margin: 0 0 20px 0; border: none; }
 
-                a { color: #15c; }
+                a { color: #15c;
 
-                a[href=""] { text-decoration: none; color: rgba(0, 0, 0, 0.95) !important; cursor: text; }
+                    &.selected { background: #3297FD; color: #fff !important; }
+
+                }
+
+                a[href=""] { text-decoration: none; color: rgba(0, 0, 0, 0.95); cursor: text; }
 
                 blockquote { margin: 20px 0; padding: 6px 0 6px 20px; font-style: italic; font-size: 16px; line-height: 24px; border-left: 3px solid fade-out($black, .2); }
 

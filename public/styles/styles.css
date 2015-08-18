@@ -28,11 +28,9 @@ body {
   overflow-x: hidden; }
   body ::-moz-selection {
     background: #3297FD;
-    padding-top: 5px;
-    color: #fff; }
+    color: #fff !important; }
   body ::selection {
     background: #3297FD;
-    padding-top: 5px;
     color: #fff; }
   @media (max-width: 800px) {
     body {
@@ -111,7 +109,7 @@ img {
 .search {
   float: right;
   width: 25%;
-  padding-left: 45px; }
+  margin-left: 20px; }
   .search .search-wrap {
     position: relative; }
     .search .search-wrap .search-submit {
@@ -187,6 +185,12 @@ img {
     background-image: url("../img/video.svg"); }
   .btn.icon-code {
     background-image: url("../img/code.svg"); }
+  .btn.btn-cancel {
+    display: none;
+    float: right;
+    margin-right: 20px; }
+    body.editing .btn.btn-cancel {
+      display: block; }
   .btn.icon-hr {
     background-image: url("../img/empty.svg"); }
   .btn.remove {
@@ -209,8 +213,7 @@ img {
       opacity: 1; }
   .btn.btn-accept {
     float: right;
-    width: 80px;
-    margin-right: -37px; }
+    width: 80px; }
     .btn.btn-accept.btn-edit:after {
       content: 'Edit'; }
     .btn.btn-accept.btn-save:after {
@@ -330,14 +333,13 @@ img {
     -webkit-transform: rotate(45deg);
     transform: rotate(45deg); }
 
-body:not(.editing) .media-toolbar {
-  display: none; }
-body:not(.editing) .language-list {
+body:not(.editing) .media-toolbar,
+body:not(.editing) .language-list,
+body:not(.editing) .link,
+body:not(.editing) .remove {
   display: none; }
 body:not(.editing) .empty:before {
   display: none !important; }
-body:not(.editing) .remove {
-  display: none; }
 body:not(.editing) .CodeMirror-cursors {
   visibility: hidden !important; }
 
@@ -441,9 +443,12 @@ body:not(.editing) .CodeMirror-cursors {
         border: none; }
       .view .section-wrap .section .sub-section a {
         color: #15c; }
+        .view .section-wrap .section .sub-section a.selected {
+          background: #3297FD;
+          color: #fff !important; }
       .view .section-wrap .section .sub-section a[href=""] {
         text-decoration: none;
-        color: rgba(0, 0, 0, 0.95) !important;
+        color: rgba(0, 0, 0, 0.95);
         cursor: text; }
       .view .section-wrap .section .sub-section blockquote {
         margin: 20px 0;
