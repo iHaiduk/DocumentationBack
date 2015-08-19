@@ -22,8 +22,11 @@ define [
       ImageTolltip::init = ->
         if ImageTolltip::tag.length
           ImageTolltip::tag.each ->
-            $(@).taggd $.extend(false, ImageTolltip::option,{edit:false, handlers:{mouseenter: 'show',mouseleave: 'hide', click: 'toggle'}}), ImageTolltip::data[$(@).attr("id")] if ImageTolltip::data[$(@).attr("id")]?
-            return
+            if ImageTolltip::data[$(@).attr("id")]?
+              ImageTolltip::data[$(@).attr("id")] = $.map ImageTolltip::data[$(@).attr("id")], (val)->
+                val if $.trim(val.text).length
+              $(@).taggd $.extend(false, ImageTolltip::option,{edit:false, handlers:{mouseenter: 'show',mouseleave: 'hide', click: 'toggle'}}), ImageTolltip::data[$(@).attr("id")]
+              return
         @
 
       ImageTolltip::add = (elem)->

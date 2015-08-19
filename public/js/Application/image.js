@@ -30,6 +30,11 @@ define(['jquery', 'taggd', 'Application/editor'], function($, taggd) {
         if (ImageTolltip.prototype.tag.length) {
           ImageTolltip.prototype.tag.each(function() {
             if (ImageTolltip.prototype.data[$(this).attr("id")] != null) {
+              ImageTolltip.prototype.data[$(this).attr("id")] = $.map(ImageTolltip.prototype.data[$(this).attr("id")], function(val) {
+                if ($.trim(val.text).length) {
+                  return val;
+                }
+              });
               $(this).taggd($.extend(false, ImageTolltip.prototype.option, {
                 edit: false,
                 handlers: {

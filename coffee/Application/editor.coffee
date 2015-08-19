@@ -165,12 +165,28 @@ define [
       CodeSave::send = ->
         CodeSave::clean()
         CodeSave::add()
-        $.ajax(
-          url: "/save"
-          type: "post"
-          data: { code: JSON.stringify(CodeSave::code) }
-          dataType: "json"
-        )
+        $("#loader").removeClass("hide")
+        setTimeout ->
+          $.ajax(
+            url: "/save"
+            type: "post"
+            data: { code: JSON.stringify(CodeSave::code) }
+            dataType: "json"
+            async:  false
+            success: (data)->
+              $("#loader").addClass("hide")
+
+              $("#viewDoc").find(".section:last").after("""<div class="section" data-type="text">
+          <div class="sub-section">
+              <p>&#8203</p>
+              <p>&#8203</p>
+              <p>&#8203</p>
+          </div>
+      </div>""")
+            error: ->
+              $("#loader").addClass("hide")
+          )
+        , 1
         return
 
       CodeSave::cancel = (cb)->
@@ -179,8 +195,11 @@ define [
           url: "/cancel"
           type: "get"
           success: (data)->
+            $("#loader").addClass("hide")
             cb data
             return
+          error: ->
+            $("#loader").addClass("hide")
         )
         return
 
@@ -230,6 +249,7 @@ define [
 
         Redactor::document.find("#initRedactor").off('click').on 'click', ->
           if $(@).hasClass("btn-edit")
+            Redactor::elements = Redactor::document.find(Redactor::nameElement)
             $(@).removeClass("btn-edit").addClass "btn-save"
             $("body").addClass "editing"
             Redactor::reset()
@@ -273,6 +293,7 @@ define [
         Redactor::changeTypeListen()
         app.Video.activate(parent.find(".videoView"))
         app.Image.init()
+        $("#loader").addClass("hide")
         return
 
       Redactor::reset = ()->
@@ -461,9 +482,6 @@ define [
               Redactor::activeElement = element
               Redactor::listenEvent element
               Redactor::showPlusButton(@)
-              @$element.find("p, br").each ->
-                $(@).remove() if !$(@).text().trim().length
-                return
               @$element.find("p").each ->
                 if $(@).text().length and !$(@).html().replace(/\u200B/g, '').length
                   $(@).html("<br/>")
@@ -472,8 +490,12 @@ define [
               @observe.load()
               return
             changeCallback: ()->
+              if !(@$element.find("p").length) and $("#viewDoc").find(".sub-section:not(.noRedactor)").length > 1
+                @$element.parents(".section").remove()
+                _docum.find("#media-toolbar").removeClass("active")
+                Redactor::lastSectionRemove = true
               @$element.find("p").each ->
-                if $(@).text().length and !$(@).html().replace(/\u200B/g, '').length
+                if !$(@).text().length or !$(@).html().replace(/\u200B/g, '').length
                   $(@).html("<br/>")
                   return
               Redactor::showPlusButton(@, true)
@@ -489,20 +511,11 @@ define [
                 return
               , 10)
               return
-            keydownCallback: (e) ->
-              if (e.keyCode is 8) and $(@selection.getBlock()).hasClass("empty")
-                $(@selection.getBlock()).remove()
-                if !@$element.find("p:not(.empty)").length and ($("#viewDoc").find(".sub-section:not(.noRedactor)").length-1)
-                  @$element.parents(".section").remove()
-                  _docum.find("#media-toolbar").removeClass("active")
-                  Redactor::lastSectionRemove = true
-                  return false
-                return
+            keydownCallback: (e)->
+              if (e.keyCode is 8)
+                if @$element.find("p").length is 1 and @$element.find(".empty").length is 1 and $("#viewDoc").find(".section:not(.noRedactor)").length is 1
+                  false
             keyupCallback: (e) ->
-              if e.keyCode is 8 and Redactor::lastSectionRemove
-                Redactor::lastSectionRemove = false
-                return false
-
               Redactor::lastSection = $(@selection.getBlock())
               if (e.keyCode is 13)
                 @selection.restore()

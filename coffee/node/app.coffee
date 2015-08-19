@@ -11,7 +11,10 @@ pub = __dirname + '/' + config.publicFolder
 app.set 'views', config.dirViews
 app.set 'view engine', config.viewEngine
 app.use express['static'](pub)
-app.use bodyParser.urlencoded(extended: false)
+app.use bodyParser.json limit: '500mb'
+app.use bodyParser.urlencoded
+  limit: '500mb'
+  extended: false
 
 
 ### Adapter ###

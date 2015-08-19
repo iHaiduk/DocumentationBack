@@ -25,7 +25,12 @@ app.set('view engine', config.viewEngine);
 
 app.use(express['static'](pub));
 
+app.use(bodyParser.json({
+  limit: '500mb'
+}));
+
 app.use(bodyParser.urlencoded({
+  limit: '500mb',
   extended: false
 }));
 
