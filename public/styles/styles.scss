@@ -10,13 +10,17 @@
 .cf:after {
   clear: both;
 }
-/*clear fix*/
+/**/
+
+/*small reset*/
 
 html * { margin: 0; padding: 0;
 
     @include prefix( ( box-sizing: border-box ), webkit moz );
 
 }
+
+/**/
 
 html, body { height: 100%; }
 
@@ -45,6 +49,8 @@ img { vertical-align: top; max-width: 100%; }
     &:after { content: ''; display: block; height: 50px; }
 
 }
+
+/*Header*/
 
 .header { position: fixed; top: 0; left: 0; right: 0; height: 60px; padding-top: 12px; background: $white; z-index: 99; box-shadow: 0 0 10px #eee;
 
@@ -80,6 +86,10 @@ img { vertical-align: top; max-width: 100%; }
 
 }
 
+/**/
+
+/*Search*/
+
 .search { float: right; width: 25%; margin-left: 20px;
 
     .search-wrap { position: relative;
@@ -102,13 +112,9 @@ img { vertical-align: top; max-width: 100%; }
 
 }
 
-.btn-plus-wrap { height: 0; text-align: center;
+/**/
 
-    @include prefix(( transition: all .2s ), webkit );
-
-}
-
-.editing .btn-plus-wrap { height: 72px; padding: 20px 0; }
+/*Buttons*/
 
 .btn { display: inline-block; vertical-align: top; position: relative; height: 36px; padding: 0 16px; color: fade-out($black, .56); background-color: transparent; font-size: 14px; text-align: center;
 
@@ -167,6 +173,9 @@ img { vertical-align: top; max-width: 100%; }
     &:active { color: fade-out($black, .2); border-color: fade-out($black, .4); }
 
 }
+/**/
+
+/*Text options*/
 
 .media-toolbar { display: none; position: absolute; top: 0; left: -55px; margin-left: 10%; z-index: 1; height: 30px; overflow: hidden;
 
@@ -224,6 +233,10 @@ img { vertical-align: top; max-width: 100%; }
 
 }
 
+/**/
+
+/*Link popup*/
+
 .link { opacity: 0; visibility: hidden; position: absolute; top: 0; left: 0; z-index: 1;  width: 282px; background-image: linear-gradient(to bottom, rgba(49, 49, 47, 0.99), #262625); border-radius: 5px;
 
     @include prefix(( transition: opacity .2s ease 50ms), webkit );
@@ -242,6 +255,8 @@ img { vertical-align: top; max-width: 100%; }
 
 }
 
+/**/
+
 body:not(.editing) {
 
     .media-toolbar,
@@ -255,11 +270,17 @@ body:not(.editing) {
 
 }
 
+/*Footer*/
+
 .footer { height: 50px; padding-top: 5px; background: #f2f2f2; color: #484848; position: relative;
 
     .footer-text { margin: 0; padding: 0 15px; line-height: 20px; font-size: 14px; }
 
 }
+
+/**/
+
+/*Navigation menu*/
 
 .nav { padding: 0; margin: 0; list-style-type: none;
 
@@ -303,6 +324,10 @@ body:not(.editing) {
     }
 
 }
+
+/**/
+
+/*Main section*/
 
 .view { position: relative;
 
@@ -386,7 +411,7 @@ body:not(.editing) {
 
 }
 
-.editing .section:hover .btn-plus { visibility: visible; opacity: 1; top: 0; }
+/**/
 
 /*product list with popup*/
 
