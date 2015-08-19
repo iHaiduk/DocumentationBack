@@ -90,7 +90,7 @@ img { vertical-align: top; max-width: 100%; }
 
         .search-text { width: 100%; outline: none; height: 36px; padding: 0 5px 0 35px; border: 1px solid fade-out($black, .85); border-radius: 20px; font-family: "Verdana";
 
-            @include prefix(( transition: all .2s ease ), webkit );
+            @include prefix(( transition: all .2s ), webkit );
 
             &:hover { border-color: fade-out($black, .7); }
 
@@ -104,7 +104,7 @@ img { vertical-align: top; max-width: 100%; }
 
 .btn-plus-wrap { height: 0; text-align: center;
 
-    @include prefix(( transition: all .2s ease ), webkit );
+    @include prefix(( transition: all .2s ), webkit );
 
 }
 
@@ -114,7 +114,7 @@ img { vertical-align: top; max-width: 100%; }
 
     text-decoration: none; cursor: pointer; border: 1px solid #D9D9D9; white-space: nowrap; border-radius: 20px; line-height: 36px;
 
-    @include prefix(( transition: all .2s ease ), webkit );
+    @include prefix(( transition: all .2s ), webkit );
 
     @include prefix(( user-select: none ), webkit moz ms );
 
@@ -192,7 +192,7 @@ img { vertical-align: top; max-width: 100%; }
 
             .btn {
 
-                @include prefix(( transform: scale(1), transition: transform .2s ease ), webkit );
+                @include prefix(( transform: scale(1), transition: transform .2s ), webkit );
 
             }
 
@@ -267,7 +267,7 @@ body:not(.editing) {
 
         text-overflow: ellipsis; position: relative;
 
-        @include prefix(( transition: all .2s ease ), webkit );
+        @include prefix(( transition: all .2s ), webkit );
 
         &:hover { box-shadow: inset -1px 0 $blue; color: $blue; }
 
@@ -330,7 +330,7 @@ body:not(.editing) {
 
                 }
 
-                sup { display: inline-block; color: fade-out($black, .2); font-size: 40px; position: relative; line-height: 1; vertical-align: baseline; padding-top: 30px;
+                sup { display: inline-block; min-width: 2px; color: fade-out($black, .2); font-size: 40px; position: relative; line-height: 1; vertical-align: baseline; padding-top: 30px;
 
                     strong { font-weight: normal; }
 
@@ -392,7 +392,7 @@ body:not(.editing) {
 
 .popup { display: none; visibility: hidden; position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0; z-index: -1; background: $white; overflow: auto;
 
-    @include prefix(( transition: all .5s ease ), webkit );
+    @include prefix(( transition: all .5s ), webkit );
 
     &.visible { visibility: visible; opacity: 1; z-index: 10000; }
 
@@ -400,7 +400,7 @@ body:not(.editing) {
 
         @include prefix(( transform: rotate(45deg)), webkit );
 
-        @include prefix(( transition: opacity .3s ease ), webkit );
+        @include prefix(( transition: opacity .3s ), webkit ms );
 
         &:hover { opacity: 1; }
 
@@ -424,7 +424,7 @@ body:not(.editing) {
 
             &:hover { text-shadow: 0 0 1px $white; }
 
-            @include prefix(( transition: all .3s ease ), webkit);
+            @include prefix(( transition: all .3s ), webkit);
 
         }
 
@@ -476,6 +476,14 @@ body:not(.editing) {
 
 /*loader*/
 
-.loader { display: none; position: fixed; top: 0; left: 0; bottom: 0; right: 0; z-index: 99999; background: #fff url("../img/loader.svg") center no-repeat; }
+.loader { position: fixed; top: 0; left: 0; bottom: 0; right: 0; z-index: 99999; background: #fff url("../img/loader.svg") center no-repeat; opacity: 1; visibility: visible;
+
+    &.hide { opacity: 0; visibility: hidden; z-index: -100;
+
+        @include prefix(( transition: all .5s linear ), webkit ms);
+
+    }
+
+}
 
 /**/

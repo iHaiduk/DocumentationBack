@@ -150,8 +150,8 @@ img {
       border: 1px solid rgba(0, 0, 0, 0.15);
       border-radius: 20px;
       font-family: "Verdana";
-      -webkit-transition: all 0.2s ease;
-      transition: all 0.2s ease; }
+      -webkit-transition: all 0.2s;
+      transition: all 0.2s; }
       .search .search-wrap .search-text:hover {
         border-color: rgba(0, 0, 0, 0.3); }
       .search .search-wrap .search-text:focus {
@@ -160,8 +160,8 @@ img {
 .btn-plus-wrap {
   height: 0;
   text-align: center;
-  -webkit-transition: all 0.2s ease;
-  transition: all 0.2s ease; }
+  -webkit-transition: all 0.2s;
+  transition: all 0.2s; }
 
 .editing .btn-plus-wrap {
   height: 72px;
@@ -183,8 +183,8 @@ img {
   white-space: nowrap;
   border-radius: 20px;
   line-height: 36px;
-  -webkit-transition: all 0.2s ease;
-  transition: all 0.2s ease;
+  -webkit-transition: all 0.2s;
+  transition: all 0.2s;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
@@ -280,8 +280,8 @@ img {
       .media-toolbar .btn-toggle.open + .menu-toolbar .btn {
         -webkit-transform: scale(1);
         transform: scale(1);
-        -webkit-transition: transform 0.2s ease;
-        transition: transform 0.2s ease; }
+        -webkit-transition: transform 0.2s;
+        transition: transform 0.2s; }
   .media-toolbar .menu-toolbar {
     visibility: hidden;
     display: inline-block;
@@ -390,8 +390,8 @@ body:not(.editing) .CodeMirror-cursors {
     overflow: hidden;
     text-overflow: ellipsis;
     position: relative;
-    -webkit-transition: all 0.2s ease;
-    transition: all 0.2s ease; }
+    -webkit-transition: all 0.2s;
+    transition: all 0.2s; }
     .nav .nav-item:hover {
       box-shadow: inset -1px 0 #1d365d;
       color: #1d365d; }
@@ -443,6 +443,7 @@ body:not(.editing) .CodeMirror-cursors {
           margin-left: 1px; }
       .view .section-wrap .section .sub-section sup, .view .section-wrap .section .sub-section sub {
         display: inline-block;
+        min-width: 2px;
         color: rgba(0, 0, 0, 0.8);
         font-size: 40px;
         position: relative;
@@ -542,8 +543,8 @@ body:not(.editing) .CodeMirror-cursors {
   z-index: -1;
   background: #fff;
   overflow: auto;
-  -webkit-transition: all 0.5s ease;
-  transition: all 0.5s ease; }
+  -webkit-transition: all 0.5s;
+  transition: all 0.5s; }
   .popup.visible {
     visibility: visible;
     opacity: 1;
@@ -561,8 +562,9 @@ body:not(.editing) .CodeMirror-cursors {
     background-size: 30px 30px;
     -webkit-transform: rotate(45deg);
     transform: rotate(45deg);
-    -webkit-transition: opacity 0.3s ease;
-    transition: opacity 0.3s ease; }
+    -webkit-transition: opacity 0.3s;
+    -ms-transition: opacity 0.3s;
+    transition: opacity 0.3s; }
     .popup .close:hover {
       opacity: 1; }
   .popup .popup-title {
@@ -600,8 +602,8 @@ body:not(.editing) .CodeMirror-cursors {
       white-space: nowrap;
       text-overflow: ellipsis;
       overflow: hidden;
-      -webkit-transition: all 0.3s ease;
-      transition: all 0.3s ease; }
+      -webkit-transition: all 0.3s;
+      transition: all 0.3s; }
       .product-list .product-item .product-name:hover, .product-list .product-item .product-data:hover {
         text-shadow: 0 0 1px #fff; }
     .product-list .product-item .product-data {
@@ -678,14 +680,22 @@ body:not(.editing) .CodeMirror-cursors {
 /**/
 /*loader*/
 .loader {
-  display: none;
   position: fixed;
   top: 0;
   left: 0;
   bottom: 0;
   right: 0;
   z-index: 99999;
-  background: #fff url("../img/loader.svg") center no-repeat; }
+  background: #fff url("../img/loader.svg") center no-repeat;
+  opacity: 1;
+  visibility: visible; }
+  .loader.hide {
+    opacity: 0;
+    visibility: hidden;
+    z-index: -100;
+    -webkit-transition: all 0.5s linear;
+    -ms-transition: all 0.5s linear;
+    transition: all 0.5s linear; }
 
 /**/
 
