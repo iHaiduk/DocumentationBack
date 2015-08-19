@@ -679,7 +679,7 @@ define [
 
         if toolbar.next().length
           top = Redactor::position[readTop].y - (toolbar.next().offset().top) - toolbar.height()*1.7+ 'px'
-          left = Math.abs(Redactor::position.start.x + Redactor::position.end.x) / 2 - (toolbar.next().offset().left) - (toolbar.width() / 2) - 42 + 'px'
+          left = Math.abs(Redactor::position.start.x + Redactor::position.end.x) / 2 - (toolbar.next().offset().left) - (toolbar.outerWidth() / 2) + 'px'
 
           if ((parseInt(left) + toolbar.width() + parseInt($("#viewDoc").offset().left) + 90) >= $(window).width() )
             left = $(window).width() - toolbar.width() - toolbar.next().offset().left - 90 + "px"

@@ -746,7 +746,7 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
         readTop = Redactor.prototype.position.start.y < Redactor.prototype.position.end.y ? 'start' : 'end';
         if (toolbar.next().length) {
           top = Redactor.prototype.position[readTop].y - (toolbar.next().offset().top) - toolbar.height() * 1.7 + 'px';
-          left = Math.abs(Redactor.prototype.position.start.x + Redactor.prototype.position.end.x) / 2 - (toolbar.next().offset().left) - (toolbar.width() / 2) - 42 + 'px';
+          left = Math.abs(Redactor.prototype.position.start.x + Redactor.prototype.position.end.x) / 2 - (toolbar.next().offset().left) - (toolbar.outerWidth() / 2) + 'px';
           if ((parseInt(left) + toolbar.width() + parseInt($("#viewDoc").offset().left) + 90) >= $(window).width()) {
             left = $(window).width() - toolbar.width() - toolbar.next().offset().left - 90 + "px";
           }
