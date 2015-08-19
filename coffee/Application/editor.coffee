@@ -180,13 +180,13 @@ define [
           <div class="sub-section">
               <p>&#8203</p>
               <p>&#8203</p>
-              <p>&#8203</p>
+              <p style="display:none">&#8203</p>
           </div>
       </div>""")
             error: ->
               $("#loader").addClass("hide")
           )
-        , 1
+        , 50
         return
 
       CodeSave::cancel = (cb)->

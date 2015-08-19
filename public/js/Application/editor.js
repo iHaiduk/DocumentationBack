@@ -191,13 +191,13 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
             async: false,
             success: function(data) {
               $("#loader").addClass("hide");
-              return $("#viewDoc").find(".section:last").after("<div class=\"section\" data-type=\"text\">\n    <div class=\"sub-section\">\n        <p>&#8203</p>\n        <p>&#8203</p>\n        <p>&#8203</p>\n    </div>\n</div>");
+              return $("#viewDoc").find(".section:last").after("<div class=\"section\" data-type=\"text\">\n    <div class=\"sub-section\">\n        <p>&#8203</p>\n        <p>&#8203</p>\n        <p style=\"display:none\">&#8203</p>\n    </div>\n</div>");
             },
             error: function() {
               return $("#loader").addClass("hide");
             }
           });
-        }, 1);
+        }, 50);
       };
 
       CodeSave.prototype.cancel = function(cb) {
