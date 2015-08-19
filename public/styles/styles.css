@@ -7,7 +7,8 @@
 .cf:after {
   clear: both; }
 
-/*clear fix*/
+/**/
+/*small reset*/
 html * {
   margin: 0;
   padding: 0;
@@ -15,6 +16,7 @@ html * {
   -moz-box-sizing: border-box;
   box-sizing: border-box; }
 
+/**/
 html, body {
   height: 100%; }
 
@@ -66,6 +68,7 @@ img {
     display: block;
     height: 50px; }
 
+/*Header*/
 .header {
   position: fixed;
   top: 0;
@@ -124,6 +127,8 @@ img {
       padding: 0 130px;
       position: relative; } }
 
+/**/
+/*Search*/
 .search {
   float: right;
   width: 25%;
@@ -157,16 +162,8 @@ img {
       .search .search-wrap .search-text:focus {
         border-color: rgba(0, 0, 0, 0.6); }
 
-.btn-plus-wrap {
-  height: 0;
-  text-align: center;
-  -webkit-transition: all 0.2s;
-  transition: all 0.2s; }
-
-.editing .btn-plus-wrap {
-  height: 72px;
-  padding: 20px 0; }
-
+/**/
+/*Buttons*/
 .btn {
   display: inline-block;
   vertical-align: top;
@@ -244,6 +241,8 @@ img {
     color: rgba(0, 0, 0, 0.8);
     border-color: rgba(0, 0, 0, 0.6); }
 
+/**/
+/*Text options*/
 .media-toolbar {
   display: none;
   position: absolute;
@@ -307,6 +306,8 @@ img {
         -webkit-transition-delay: 90ms !important;
         transition-delay: 90ms !important; }
 
+/**/
+/*Link popup*/
 .link {
   opacity: 0;
   visibility: hidden;
@@ -352,6 +353,7 @@ img {
     -webkit-transform: rotate(45deg);
     transform: rotate(45deg); }
 
+/**/
 body:not(.editing) .media-toolbar,
 body:not(.editing) .language-list,
 body:not(.editing) .link,
@@ -362,6 +364,7 @@ body:not(.editing) .empty:before {
 body:not(.editing) .CodeMirror-cursors {
   visibility: hidden !important; }
 
+/*Footer*/
 .footer {
   height: 50px;
   padding-top: 5px;
@@ -374,6 +377,8 @@ body:not(.editing) .CodeMirror-cursors {
     line-height: 20px;
     font-size: 14px; }
 
+/**/
+/*Navigation menu*/
 .nav {
   padding: 0;
   margin: 0;
@@ -412,6 +417,8 @@ body:not(.editing) .CodeMirror-cursors {
   .nav > .nav-list.active .nav-list {
     height: 30px; }
 
+/**/
+/*Main section*/
 .view {
   position: relative; }
   .view .section-wrap .section {
@@ -525,11 +532,7 @@ body:not(.editing) .CodeMirror-cursors {
   .view #form1 {
     display: none; }
 
-.editing .section:hover .btn-plus {
-  visibility: visible;
-  opacity: 1;
-  top: 0; }
-
+/**/
 /*product list with popup*/
 .popup {
   display: none;
