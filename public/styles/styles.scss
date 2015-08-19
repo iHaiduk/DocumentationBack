@@ -388,6 +388,8 @@ body:not(.editing) {
 
 .editing .section:hover .btn-plus { visibility: visible; opacity: 1; top: 0; }
 
+/*product list with popup*/
+
 .popup { display: none; visibility: hidden; position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0; z-index: -1; background: $white; overflow: auto;
 
     @include prefix(( transition: all .5s ease ), webkit );
@@ -438,6 +440,8 @@ body:not(.editing) {
 
 }
 
+/**/
+
 /*Authorization*/
 
 .authorization { position: absolute; top: 0; left: 0; bottom: 0; right: 0; margin: auto; width: 400px; height: 280px; padding: 40px; box-shadow: 0 0 10px #eee; border-radius: 5px;
@@ -467,5 +471,11 @@ body:not(.editing) {
     }
 
 }
+
+/**/
+
+/*loader*/
+
+.loader { display: none; position: fixed; top: 0; left: 0; bottom: 0; right: 0; z-index: 99999; background: #fff url("../img/loader.svg") center no-repeat; }
 
 /**/

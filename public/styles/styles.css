@@ -529,6 +529,7 @@ body:not(.editing) .CodeMirror-cursors {
   opacity: 1;
   top: 0; }
 
+/*product list with popup*/
 .popup {
   display: none;
   visibility: hidden;
@@ -617,6 +618,7 @@ body:not(.editing) .CodeMirror-cursors {
       -ms-transform: translate3d(0, -20px, 0);
       transform: translate3d(0, -20px, 0); }
 
+/**/
 /*Authorization*/
 .authorization {
   position: absolute;
@@ -672,6 +674,18 @@ body:not(.editing) .CodeMirror-cursors {
     transition: all 0.2s; }
     .authorization .sign-in:hover {
       background: #D2493C; }
+
+/**/
+/*loader*/
+.loader {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 99999;
+  background: #fff url("../img/loader.svg") center no-repeat; }
 
 /**/
 
