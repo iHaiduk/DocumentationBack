@@ -2,6 +2,7 @@
 .taggd-wrapper {
 	margin-bottom: 20px;
 	position: relative;
+	z-index: 1;
 }
 
 .taggd-wrapper .taggd-item {
