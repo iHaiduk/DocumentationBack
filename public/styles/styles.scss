@@ -124,7 +124,7 @@ img { vertical-align: top; max-width: 100%; }
 
     @include prefix(( user-select: none ), webkit moz ms );
 
-    &.btn-product { float: left; width: 25%; width: calc( 25% - 45px ); margin-left: 15px; display: none; }
+    &.btn-product { float: left; width: 25%; width: calc( 25% - 45px ); margin-left: 15px; }
 
     &.icon-plus { background-image: url("../img/plus.svg"); }
 
@@ -415,7 +415,7 @@ body:not(.editing) {
 
 /*product list with popup*/
 
-.popup { display: none; visibility: hidden; position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0; z-index: -1; background: $white; overflow: auto;
+.popup { visibility: hidden; position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0; z-index: -1; background: $white; overflow: auto; min-width: 768px;
 
     @include prefix(( transition: all .5s ), webkit );
 
@@ -437,9 +437,9 @@ body:not(.editing) {
 
 .product-list { padding: 0 20px; font-size: 0;
 
-    .product-item { display: inline-block; width: 21%; height: 200px; margin: 2%; position: relative; text-decoration: none; background: url("http://placecreature.com/300/200") center no-repeat;
+    .product-item { display: inline-block; width: 21%; height: 200px; margin: 2%; position: relative; text-decoration: none; background: url("../img/product.svg") center no-repeat; border-radius: 5px;
 
-        overflow: hidden; background-size: cover; vertical-align: top;
+        box-shadow: 0 0 10px rgba(0,0,0,.15); overflow: hidden; background-size: 40%; vertical-align: top;
 
         @include prefix(( flex: 1 ), webkit moz ms);
 
@@ -459,7 +459,11 @@ body:not(.editing) {
 
         }
 
-        &:hover .product-data { @include prefix(( transform: translate3d(0, -20px, 0) ), webkit moz ms); }
+        &:hover { box-shadow: 0 0 10px rgba(0,0,0,.3);
+
+            .product-data { @include prefix(( transform: translate3d(0, -20px, 0) ), webkit moz ms); }
+
+        }
 
     }
 
