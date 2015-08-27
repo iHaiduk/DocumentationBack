@@ -355,7 +355,7 @@ body:not(.editing) {
 
                 }
 
-                sup { display: inline-block; min-width: 2px; color: fade-out($black, .2); font-size: 40px; position: relative; line-height: 1; vertical-align: baseline; padding-top: 30px;
+                sup { display: inline-block; width: 100%; min-width: 2px; color: fade-out($black, .2); font-size: 40px; position: relative; line-height: 1; vertical-align: baseline; padding-top: 30px;
 
                     strong { font-weight: normal; }
 
