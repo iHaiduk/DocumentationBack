@@ -15,6 +15,13 @@ routes =
 
 	redactor:
 		type: 'get'
+		link: '/redactor/:id'
+		control: (req, res) ->
+			HomeController::run(req, res)
+			return
+
+	page:
+		type: 'get'
 		link: '/redactor'
 		control: (req, res) ->
 			HomeController::run(req, res)

@@ -8,7 +8,8 @@ class HomeController
   pages: null
   run: (req, res)->
     v = new View(res, 'index')
-    defaultPage = HomeController::defaultPage
+    defaultPage = req.params.id || 3
+    HomeController::defaultPage = defaultPage
     Page.findOne({page_id: defaultPage}).exec (err, pages)->
       unless pages?
         HomeController::pages = pages
