@@ -9,8 +9,10 @@
                 <input class="search-text" id="searchInput" type="text" placeholder="Search..." />
             </div>
         </form>
+        <%if(role){%>
         <span class="btn btn-accept btn-edit" id="initRedactor"></span>
         <span class="btn btn-cancel" id="cancelRedactor">Cancel</span>
+        <%}%>
         <span class="user-wrap">
             <span class="user"></span>
             <a href="/" class="logout">Log out</a>

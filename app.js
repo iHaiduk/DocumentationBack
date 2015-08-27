@@ -1,4 +1,4 @@
-var app, applicationDirectory, bodyParser, config, express, path, pub;
+var app, applicationDirectory, bodyParser, config, express, path, pub, session;
 
 applicationDirectory = __dirname + '/application/';
 
@@ -14,6 +14,8 @@ global["http"] = require('http').Server(app);
 
 config = require(applicationDirectory + 'config');
 
+session = require('express-session');
+
 
 /* Path to express public directory */
 
@@ -22,6 +24,8 @@ pub = __dirname + '/' + config.publicFolder;
 app.set('views', config.dirViews);
 
 app.set('view engine', config.viewEngine);
+
+app.set('trust proxy', 1);
 
 app.use(express['static'](pub));
 
@@ -32,6 +36,12 @@ app.use(bodyParser.json({
 app.use(bodyParser.urlencoded({
   limit: '500mb',
   extended: false
+}));
+
+app.use(session({
+  secret: 'documentation',
+  resave: false,
+  saveUninitialized: true
 }));
 
 

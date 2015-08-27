@@ -37,12 +37,14 @@ HomeController = (function() {
         });
         page.save(function(err) {
           v.render({
-            html: baseText
+            html: baseText,
+            role: req.session.role === 'moder'
           });
         });
       } else {
         v.render({
-          html: JSON.parse(pages.code)
+          html: JSON.parse(pages.code),
+          role: req.session.role === 'moder'
         });
       }
     });

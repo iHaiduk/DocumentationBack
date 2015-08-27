@@ -23,6 +23,7 @@ class HomeController
         page.save((err)->
           v.render(
             html: baseText
+            role: req.session.role is 'moder'
           )
           return
         )
@@ -30,6 +31,7 @@ class HomeController
       else
         v.render(
           html: JSON.parse pages.code
+          role: req.session.role is 'moder'
         )
         return
     return
