@@ -17,6 +17,13 @@ routes = {
   },
   redactor: {
     type: 'get',
+    link: '/redactor/:id',
+    control: function(req, res) {
+      HomeController.prototype.run(req, res);
+    }
+  },
+  page: {
+    type: 'get',
     link: '/redactor',
     control: function(req, res) {
       HomeController.prototype.run(req, res);

@@ -645,7 +645,7 @@ define(['jquery', 'codemirror', 'redactor', 'Application/menu', 'Application/ima
         $("#link-toolbar").removeClass("active");
         if (parent && parent[0].tagName.toLowerCase() === "a") {
           Redactor.prototype.lastLinkActive = parent.attr("id");
-          offset = _docum.find(".redactor-toolbar").offset();
+          offset = parent.parents(".section").find(".redactor-toolbar").offset();
           Redactor.prototype.linkShow(offset);
         } else {
           if (!Redactor.prototype.editLinkActive) {

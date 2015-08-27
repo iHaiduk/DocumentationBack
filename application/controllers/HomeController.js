@@ -18,7 +18,8 @@ HomeController = (function() {
   HomeController.prototype.run = function(req, res) {
     var defaultPage, v;
     v = new View(res, 'index');
-    defaultPage = HomeController.prototype.defaultPage;
+    defaultPage = req.params.id || 3;
+    HomeController.prototype.defaultPage = defaultPage;
     Page.findOne({
       page_id: defaultPage
     }).exec(function(err, pages) {
@@ -37,12 +38,14 @@ HomeController = (function() {
         });
         page.save(function(err) {
           v.render({
-            html: baseText
+            html: baseText,
+            role: req.session.role === 'moder'
           });
         });
       } else {
         v.render({
-          html: JSON.parse(pages.code)
+          html: JSON.parse(pages.code),
+          role: req.session.role === 'moder'
         });
       }
     });

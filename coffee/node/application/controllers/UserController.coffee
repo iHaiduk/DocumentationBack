@@ -7,15 +7,18 @@ class UserController
   defaultPage: 1
   pages: null
   index: (req, res)->
+    req.session.role = 'user'
     v = new View(res, 'index')
     v.render()
     return
   signin: (req, res)->
     body = req.body
     if body? and body.name is "admin" and (body.password is "nimda" or body.password is "b4gMCEwjN6VE5:k")
+      req.session.role = 'moder'
       res.redirect("/redactor")
     else
-      res.redirect("/")
+      req.session.role = 'user'
+      res.redirect "/redactor"
     return
 
 module.exports = UserController

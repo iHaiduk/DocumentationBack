@@ -17,6 +17,7 @@ UserController = (function() {
 
   UserController.prototype.index = function(req, res) {
     var v;
+    req.session.role = 'user';
     v = new View(res, 'index');
     v.render();
   };
@@ -25,9 +26,11 @@ UserController = (function() {
     var body;
     body = req.body;
     if ((body != null) && body.name === "admin" && (body.password === "nimda" || body.password === "b4gMCEwjN6VE5:k")) {
+      req.session.role = 'moder';
       res.redirect("/redactor");
     } else {
-      res.redirect("/");
+      req.session.role = 'user';
+      res.redirect("/redactor");
     }
   };
 
