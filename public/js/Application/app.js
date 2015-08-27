@@ -5,7 +5,6 @@ define(['jquery'], function($, Typekit) {
     $('.btn-product, .close').off('click').on('click', function() {
       var bool;
       bool = $(this).hasClass('btn-product');
-      $('body').toggleClass('noScroll', bool);
       $('.popup').toggleClass('visible', bool);
     });
   });
