@@ -449,6 +449,7 @@ body:not(.editing) .CodeMirror-cursors {
           margin-left: 1px; }
       .view .section-wrap .section .sub-section sup, .view .section-wrap .section .sub-section sub {
         display: inline-block;
+        width: 100%;
         min-width: 2px;
         color: rgba(0, 0, 0, 0.8);
         font-size: 40px;
