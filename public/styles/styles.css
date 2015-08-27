@@ -545,7 +545,6 @@ body:not(.editing) .CodeMirror-cursors {
   z-index: -1;
   background: #fff;
   overflow: auto;
-  min-width: 768px;
   -webkit-transition: all 0.5s;
   transition: all 0.5s; }
   .popup.visible {
@@ -576,7 +575,8 @@ body:not(.editing) .CodeMirror-cursors {
     text-align: center; }
 
 .product-list {
-  padding: 0 20px;
+  max-width: 1400px;
+  margin: 0 auto;
   font-size: 0; }
   .product-list .product-item {
     display: inline-block;

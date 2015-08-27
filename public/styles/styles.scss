@@ -415,7 +415,7 @@ body:not(.editing) {
 
 /*product list with popup*/
 
-.popup { visibility: hidden; position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0; z-index: -1; background: $white; overflow: auto; min-width: 768px;
+.popup { visibility: hidden; position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0; z-index: -1; background: $white; overflow: auto;
 
     @include prefix(( transition: all .5s ), webkit );
 
@@ -435,7 +435,7 @@ body:not(.editing) {
 
 }
 
-.product-list { padding: 0 20px; font-size: 0;
+.product-list { max-width: 1400px; margin: 0 auto; font-size: 0;
 
     .product-item { display: inline-block; width: 21%; height: 200px; margin: 2%; position: relative; text-decoration: none; background: url("../img/product.svg") center no-repeat; border-radius: 5px;
 
