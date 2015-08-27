@@ -599,7 +599,7 @@ define [
         $("#link-toolbar").removeClass("active")
         if parent and parent[0].tagName.toLowerCase() is "a"
           Redactor::lastLinkActive = parent.attr("id")
-          offset = _docum.find(".redactor-toolbar").offset();
+          offset = parent.parents(".section").find(".redactor-toolbar").offset();
           Redactor::linkShow(offset)
           return
         else
